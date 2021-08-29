@@ -2,6 +2,8 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import axios from "axios";
 import { API_URL } from "../../environments/environments";
 import { Thread } from "@prisma/client";
+import Link from "next/link";
+import { Button } from "@material-ui/core";
 
 const apiUrl = API_URL + "/threads";
 
@@ -10,6 +12,18 @@ const FindThread = ({ thread }: Props) => {
         <>
             <p>create: {thread.createdAt}</p>
             <p>title: {thread.title}</p>
+            <div>
+                <Link href="#">
+                    <a className="p-2">
+                        <Button variant="outlined">Delete</Button>
+                    </a>
+                </Link>
+                <Link href="#">
+                    <a className="p-2">
+                        <Button variant="outlined" color="primary">Update</Button>
+                    </a>
+                </Link>
+            </div>
         </>
     )
 }

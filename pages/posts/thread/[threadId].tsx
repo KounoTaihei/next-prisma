@@ -6,7 +6,15 @@ import { API_URL } from "../../../environments/environments";
 const FindPostsByThreadId = ({ posts }: Props) => {
     return (
         <>
-        {posts.map(post => <p key={post.id}>{post.title}</p>)}
+            <ul>
+            {posts.map(post => 
+                <li key={post.id}>
+                    <p>create: {post.createdAt}</p>
+                    <p>title: {post.title}</p>
+                    <p>body: {post.body}</p>
+                </li>
+            )}
+            </ul>
         </>
     )
 }
