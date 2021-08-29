@@ -14,7 +14,7 @@ const Threads = ({ threads }: Props) => {
                 {threads.map(thread =>
                     <li key={thread.id}>
                         <p>title: <Link href={`/threads/${thread.id}`}><a>{thread.title}</a></Link></p>
-                        <p>posts: <Link href={`/posts?threadId=${thread.id}`}><a>{thread.posts.length}</a></Link></p>
+                        <p>posts: <Link href={`/posts/thread/${thread.id}`}><a>{thread.posts.length}</a></Link></p>
                     </li>    
                 )}
             </ul>
