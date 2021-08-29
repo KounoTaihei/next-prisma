@@ -9,6 +9,7 @@ const apiUrl = API_URL + "/threads";
 const Threads = ({ threads }: Props) => {
     return (
         <>
+            <Link href="/threads/create"><a>add thread</a></Link>
             <ul>
                 {threads.map(thread =>
                     <li key={thread.id}>

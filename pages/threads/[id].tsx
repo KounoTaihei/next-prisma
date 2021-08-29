@@ -2,13 +2,13 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import axios from "axios";
 import { API_URL } from "../../environments/environments";
 import { Thread } from "@prisma/client";
-import { useRouter } from "next/dist/client/router";
 
 const apiUrl = API_URL + "/threads";
 
 const FindThread = ({ thread }: Props) => {
     return (
         <>
+            <p>create: {thread.createdAt}</p>
             <p>title: {thread.title}</p>
         </>
     )
