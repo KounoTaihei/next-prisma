@@ -22,7 +22,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-    const id = params?.id?.toString();
+    const id = params?.threadId?.toString();
     const thread: Thread = await axios.get(`${apiUrl}/${id}`).then(v => v.data);
     
     return {

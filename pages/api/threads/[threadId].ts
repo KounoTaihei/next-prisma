@@ -6,7 +6,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const method = req.method;
     switch (method) {
         case 'GET': {
-            const id: string = req.query.id.toString();
+            const id: string = req.query.threadId.toString();
             const thread = await prisma.thread.findUnique({ where: { id } });
             res.json(thread);
             break;

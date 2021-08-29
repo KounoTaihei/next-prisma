@@ -1,7 +1,7 @@
 import { GetStaticProps } from "next";
 import axios from "axios";
 import { API_URL } from "../../environments/environments";
-import { Thread } from "@prisma/client";
+import { Post, Thread } from "@prisma/client";
 import Link from "next/link";
 
 const apiUrl = API_URL + "/threads";
@@ -14,6 +14,7 @@ const Threads = ({ threads }: Props) => {
                 {threads.map(thread =>
                     <li key={thread.id}>
                         <p>title: <Link href={`/threads/${thread.id}`}><a>{thread.title}</a></Link></p>
+                        <p>posts: <Link href={`/posts?threadId=${thread.id}`}><a>{thread.posts.length}</a></Link></p>
                     </li>    
                 )}
             </ul>
@@ -32,8 +33,12 @@ export const getStaticProps: GetStaticProps = async () => {
     }
 }
 
+interface ThreadWithPosts extends Thread {
+    posts: Post[]
+}
+
 interface Props {
-    threads: Thread[]
+    threads: ThreadWithPosts[]
 }
 
 export default Threads;

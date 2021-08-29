@@ -6,7 +6,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const method = req.method;
     switch (method) {
         case 'GET': {
-            const threads = await prisma.thread.findMany();
+            const threads = await prisma.thread.findMany({
+                include: {
+                    posts: true
+                }
+            });
             res.status(200).json(threads);
             break;
         }
