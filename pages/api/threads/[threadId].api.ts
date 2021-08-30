@@ -11,6 +11,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             res.json(thread);
             break;
         }
+        case 'DELETE': {
+            const id: string = req.query.threadId.toString();
+            const thread: Thread = await prisma.thread.delete({
+                where: { id }
+            });
+            res.json(thread);
+            break;
+        }
         default: {
             res.status(403).end();
         }

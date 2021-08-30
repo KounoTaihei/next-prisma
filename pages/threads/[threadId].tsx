@@ -4,10 +4,19 @@ import { API_URL } from "../../environments/environments";
 import { Thread } from "@prisma/client";
 import Link from "next/link";
 import { Button } from "@material-ui/core";
+import { useRouter } from "next/dist/client/router";
 
 const apiUrl = API_URL + "/threads";
 
 const FindThread = ({ thread }: Props) => {
+    const router = useRouter();
+
+    async function deleteThread() {
+        if(confirm(`${thread.title}を削除しますか？`)) {
+            await axios.delete(`${apiUrl}/${thread.id}`).then(() => router.push('/threads'));
+        }
+    }
+
     return (
         <>
             <p>create: {thread.createdAt}</p>
@@ -15,7 +24,7 @@ const FindThread = ({ thread }: Props) => {
             <div>
                 <Link href="#">
                     <a className="p-2">
-                        <Button variant="outlined">Delete</Button>
+                        <Button variant="outlined" onClick={deleteThread}>Delete</Button>
                     </a>
                 </Link>
                 <Link href="#">
