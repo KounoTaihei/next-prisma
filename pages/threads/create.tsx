@@ -1,7 +1,6 @@
-import { User } from "@prisma/client";
+import { Button } from "@material-ui/core";
 import axios from "axios";
 import { Formik } from "formik";
-import { GetStaticProps } from "next";
 import * as Yup from 'yup';
 import { API_URL } from "../../environments/environments";
 
@@ -54,12 +53,12 @@ const CreateThread = () => {
                             </span>
                         </div>
                         <div className="m-2">
-                            <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" type="button" onClick={handleReset}>
+                            <Button variant="outlined" onClick={handleReset}>
                                 Clear
-                            </button>
-                            <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" type="submit" disabled={isSubmitting}>
+                            </Button>
+                            <Button variant="outlined" color="primary" type="submit" disabled={isSubmitting}>
                                 Create
-                            </button>
+                            </Button>
                         </div>
                     </form>
                 )}
