@@ -7,6 +7,7 @@ import { Button, Modal } from "@material-ui/core";
 import { useRouter } from "next/dist/client/router";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import prisma from "../../lib/prisma";
 
 const apiUrl = process.env.API_URL + "/threads";
 
@@ -73,7 +74,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
     const id = params?.threadId?.toString();
-    const thread: Thread = await axios.get(`${apiUrl}/${id}`).then(v => v.data);
+    const res: Thread | null = await prisma.thread.findUnique({
+        where: {
+            id
+        }
+    });
+    const thread: Thread = await JSON.parse(JSON.stringify(res));
     
     return {
         props: {

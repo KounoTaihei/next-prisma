@@ -1,8 +1,6 @@
 import { Post } from "@prisma/client";
-import axios from "axios";
 import { GetStaticProps } from "next";
-
-const apiUrl = process.env.API_URL + "/posts";
+import prisma from "../../lib/prisma";
 
 const Posts = ({ posts }: Props) => {
     return (
@@ -12,15 +10,9 @@ const Posts = ({ posts }: Props) => {
     )
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-    let posts: Post[];
-
-    if(params?.threadId !== undefined) {
-        const threadId = params.threadId.toString();
-        posts = await axios.get(`${apiUrl}/${threadId}`)
-    } else {
-        posts = await axios.get(apiUrl).then(v => v.data);
-    }
+export const getStaticProps: GetStaticProps = async () => {
+    const res = await prisma.post.findMany();
+    const posts: Post[] = await JSON.parse(JSON.stringify(res));
 
     return {
         props: { posts }

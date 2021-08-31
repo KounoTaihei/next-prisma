@@ -1,3 +1,4 @@
+import { PrismaClient } from '@prisma/client'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 
@@ -15,3 +16,7 @@ const Home: NextPage = () => {
 }
 
 export default Home
+
+declare global {
+  var prisma: PrismaClient;
+}
