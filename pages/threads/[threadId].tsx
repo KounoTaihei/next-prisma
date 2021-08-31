@@ -1,7 +1,6 @@
 import React from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import axios from "axios";
-import { API_URL } from "../../environments/environments";
 import { Thread } from "@prisma/client";
 import Link from "next/link";
 import { Button, Modal } from "@material-ui/core";
@@ -9,7 +8,7 @@ import { useRouter } from "next/dist/client/router";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const apiUrl = API_URL + "/threads";
+const apiUrl = process.env.API_URL + "/threads";
 
 const FindThread = ({ thread }: Props) => {
     const router = useRouter();

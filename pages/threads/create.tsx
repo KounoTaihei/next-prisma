@@ -2,9 +2,8 @@ import { Button } from "@material-ui/core";
 import axios from "axios";
 import { Formik } from "formik";
 import * as Yup from 'yup';
-import { API_URL } from "../../environments/environments";
 
-const apiUrl = API_URL + "/threads";
+const apiUrl = process.env.API_URL + "/threads";
 
 const CreateThread = () => {
     const initialValues = {

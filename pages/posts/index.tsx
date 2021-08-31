@@ -1,9 +1,8 @@
-import { Post, Thread } from "@prisma/client";
+import { Post } from "@prisma/client";
 import axios from "axios";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { API_URL } from "../../environments/environments";
+import { GetStaticProps } from "next";
 
-const apiUrl = API_URL + "/posts";
+const apiUrl = process.env.API_URL + "/posts";
 
 const Posts = ({ posts }: Props) => {
     return (

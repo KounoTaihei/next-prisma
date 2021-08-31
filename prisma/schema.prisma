@@ -17,7 +17,7 @@ model User {
   password String
   image String?
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @map(name: "updatedAt")
   threads Thread[]
 }
 
@@ -25,7 +25,7 @@ model Thread {
   id String @id @default(uuid())
   title String
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @map(name: "updatedAt")
   author User? @relation(fields: [authorId], references: [id])
   authorId String?
   posts Post[]
@@ -37,7 +37,7 @@ model Post {
   body String
   image String?
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @map(name: "updatedAt")
   thread Thread @relation(fields: [threadId], references: [id])
   threadId String
 }

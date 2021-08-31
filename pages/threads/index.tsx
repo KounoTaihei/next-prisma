@@ -1,10 +1,9 @@
 import { GetStaticProps } from "next";
 import axios from "axios";
-import { API_URL } from "../../environments/environments";
 import { Post, Thread } from "@prisma/client";
 import Link from "next/link";
 
-const apiUrl = API_URL + "/threads";
+const apiUrl = process.env.API_URL + "/threads";
 
 const Threads = ({ threads }: Props) => {
     return (
