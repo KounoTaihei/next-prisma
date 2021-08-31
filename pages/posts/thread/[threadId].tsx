@@ -1,5 +1,4 @@
 import { Post, Thread } from "@prisma/client";
-import axios from "axios";
 import { GetStaticPaths, GetStaticProps } from "next";
 import prisma from "../../../lib/prisma";
 
@@ -22,7 +21,7 @@ const FindPostsByThreadId = ({ posts }: Props) => {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const threads: Thread[] = await axios.get(`${apiUrl}/threads`).then(v => v.data);
+    const threads: Thread[] = await prisma.thread.findMany();
     const paths = threads.map(thread => `/posts/thread/${thread.id}`);
 
     return { paths, fallback: false }

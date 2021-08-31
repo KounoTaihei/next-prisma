@@ -66,7 +66,7 @@ const FindThread = ({ thread }: Props) => {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const threads: Thread[] = await axios.get(apiUrl).then(v => v.data);
+    const threads: Thread[] = await prisma.thread.findMany();
     const paths = threads.map(thread => `/threads/${thread.id}`);
 
     return { paths, fallback: false }
