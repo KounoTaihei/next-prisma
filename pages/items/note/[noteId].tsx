@@ -15,7 +15,7 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                 <ul>
                     {items.map(item => 
                         <li key={item.id}>
-                            <p>create: {formatDate(note.createdAt)}</p>
+                            <p>create: {formatDate(item.createdAt)}</p>
                             <p>body: {item.body}</p>
                         </li>
                     )}
@@ -47,6 +47,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const items: Item[] = await prisma.item.findMany({
         where: {
             noteId
+        },
+        orderBy: {
+            createdAt: "desc"
         }
     })
     .then(res => JSON.parse(JSON.stringify(res)));
