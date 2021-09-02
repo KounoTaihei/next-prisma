@@ -1,11 +1,14 @@
 import { Button, TextField } from "@material-ui/core";
 import axios from "axios";
 import { Formik } from "formik";
+import { useRouter } from "next/dist/client/router";
 import * as Yup from 'yup';
 
 const apiUrl = process.env.API_URL + "/notes";
 
 const CreateNote = () => {
+    const router = useRouter();
+
     const initialValues = {
         title: ""
     }
@@ -20,8 +23,8 @@ const CreateNote = () => {
                 initialValues = {initialValues}
                 validationSchema = {validationSchema}
                 onSubmit = {async (values) => {
-                    const res = await axios.post(apiUrl, values);
-                    console.log(res.data);
+                    await axios.post(apiUrl, values);
+                    router.push('/notes');
                 }}
             >
                 {({

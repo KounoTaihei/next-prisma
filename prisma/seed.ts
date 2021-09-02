@@ -4,14 +4,13 @@ async function main() {
   const taihei = await prisma.user.create({
     data: {
       email: 'taihei@email.com',
-      name: 'Kouno Taihei',
+      name: '太平',
       notes: {
         create: {
-          title: "this is a taihei's thread",
+          title: "太平のノート",
           items: {
             create: {
-              title: '太平の最初の投稿',
-              body: '太平の最初の投稿の本文',
+              body: '太平の最初のアイテム',
             },
           },
         },
@@ -22,21 +21,19 @@ async function main() {
   const megumi = await prisma.user.create({
     data: {
       email: 'megumi@email.com',
-      name: 'Kouno megumi',
+      name: '恵',
       notes: {
         create: {
-          title: "this is a megumi's thread",
+          title: "恵のノート",
           items: {
             create: {
-              title: '恵の最初の投稿',
-              body: '恵の最初の投稿の本文',
+              body: '恵の最初のアイテム',
             },
           },
         },
       },
     },
   });
-  console.log(taihei, megumi);
 }
 
 main()

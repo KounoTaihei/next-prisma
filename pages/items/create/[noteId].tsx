@@ -1,14 +1,20 @@
 import { Button, TextField } from "@material-ui/core";
+import { Note } from "@prisma/client";
 import axios from "axios";
 import { Formik } from "formik";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { useRouter } from "next/dist/client/router";
 import * as Yup from 'yup';
+import prisma from '../../../lib/prisma';
 
 const apiUrl = process.env.API_URL + "/items";
 
-const CreateItem = () => {
+const CreateItem = ({ note }: Props) => {
+    const router = useRouter();
+
     const initialValues = {
-        title: "",
-        body:""
+        body:"",
+        noteId: note.id
     }
 
     const validationSchema = Yup.object().shape({
@@ -17,12 +23,13 @@ const CreateItem = () => {
 
     return (
         <>
+            <div>{note.title}のアイテムを追加</div>
             <Formik
                 initialValues = {initialValues}
                 validationSchema = {validationSchema}
                 onSubmit = {async (values) => {
-                    const res = await axios.post(apiUrl, values);
-                    console.log(res.data);
+                    await axios.post(`${apiUrl}/note/${note.id}`, values);
+                    router.push(`/items/note/${note.id}`);
                 }}
             >
                 {({
@@ -37,16 +44,6 @@ const CreateItem = () => {
                 }) => (
                     <form onSubmit={handleSubmit}>
                         <div>
-                            <div>
-                                <TextField
-                                    label="タイトル"
-                                    type="text"
-                                    name="title"
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.title}
-                                />
-                            </div>
                             <div>
                                 <TextField
                                     error={errors.body && touched.body ? true : false}
@@ -73,6 +70,29 @@ const CreateItem = () => {
             </Formik>
         </>
     )
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+    const notes: Note[] = await prisma.note.findMany();
+    const paths = notes.map(note => `/items/create/${note.id}`);
+
+    return { paths, fallback: false }
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    const id = params?.noteId?.toString();
+    const note: Note | null = await prisma.note.findUnique({
+        where: { id }
+    })
+    .then(res => JSON.parse(JSON.stringify(res)));
+
+    return {
+        props: { note }
+    }
+}
+
+interface Props {
+    note: Note
 }
 
 export default CreateItem;

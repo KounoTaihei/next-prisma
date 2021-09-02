@@ -1,17 +1,23 @@
 import { GetStaticProps } from "next";
-import { Item, Note } from "@prisma/client";
+import { Item, Note, User } from "@prisma/client";
 import Link from "next/link";
 import prisma from "../../lib/prisma";
+import { Card } from "@material-ui/core";
+import { useRouter } from "next/dist/client/router";
 
 const Notes = ({ notes }: Props) => {
+    const router = useRouter();
+
     return (
         <>
             <Link href="/notes/create"><a>add note</a></Link>
             <ul>
                 {notes.map(note =>
                     <li key={note.id}>
-                        <p>title: <Link href={`/notes/${note.id}`}><a>{note.title}</a></Link></p>
-                        <p>posts: <Link href={`/items/note/${note.id}`}><a>{note.items.length}</a></Link></p>
+                        <Card variant="outlined" className="p-2 cursor-pointer hover:bg-gray-200" onClick={() => router.push(`/items/note/${note.id}`)}>
+                            <p>タイトル: {note.title}[{note.items.length}]</p>
+                            <p>ユーザー: {note.user.name}</p>
+                        </Card>
                     </li>    
                 )}
             </ul>
@@ -22,10 +28,11 @@ const Notes = ({ notes }: Props) => {
 export const getStaticProps: GetStaticProps = async () => {
     const res = await prisma.note.findMany({
         include: {
+            user: true,
             items: true
         }
     });
-    const notes: NoteWithItems[] = await JSON.parse(JSON.stringify(res));
+    const notes: NoteWithUserAndItems[] = await JSON.parse(JSON.stringify(res));
 
     return {
         props: {
@@ -34,12 +41,13 @@ export const getStaticProps: GetStaticProps = async () => {
     }
 }
 
-interface NoteWithItems extends Note {
+interface NoteWithUserAndItems extends Note {
+    user: User
     items: Item[]
 }
 
 interface Props {
-    notes: NoteWithItems[]
+    notes: NoteWithUserAndItems[]
 }
 
 export default Notes;
