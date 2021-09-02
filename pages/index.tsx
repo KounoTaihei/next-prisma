@@ -18,13 +18,13 @@ const Home: NextPage = () => {
         {!session && (
           <>
             サインインしてください。 <br />
-            <Button variant="outlined" onClick={signIn}>Sign in</Button>
+            <Button variant="outlined" onClick={() => signIn()}>Sign in</Button>
           </>
         )}
         {session && (
           <>
-            サインイン完了。 email: {session.user?.email} <br />
-            <Button variant="outlined" onClick={signOut}>Sign out</Button>
+            サインイン完了。 {session.user?.name} <br />
+            <Button variant="outlined" onClick={() => signOut()}>Sign out</Button>
           </>
         )}
       </div>

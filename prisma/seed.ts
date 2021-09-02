@@ -7,7 +7,6 @@ async function main() {
     data: {
       email: 'taihei@email.com',
       name: 'Kouno Taihei',
-      password: 'taihei',
       threads: {
         create: {
           title: "this is a taihei's thread",
@@ -26,7 +25,6 @@ async function main() {
     data: {
       email: 'megumi@email.com',
       name: 'Kouno megumi',
-      password: 'megumi',
       threads: {
         create: {
           title: "this is a megumi's thread",

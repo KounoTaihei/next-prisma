@@ -23,6 +23,7 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
+    "@next-auth/prisma-adapter": "^0.5.4",
     "@prisma/client": "^2.30.2",
     "@types/node": "^16.7.5",
     "@types/react": "17.0.19",
