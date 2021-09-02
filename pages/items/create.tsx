@@ -3,15 +3,16 @@ import axios from "axios";
 import { Formik } from "formik";
 import * as Yup from 'yup';
 
-const apiUrl = process.env.API_URL + "/notes";
+const apiUrl = process.env.API_URL + "/items";
 
-const CreateNote = () => {
+const CreateItem = () => {
     const initialValues = {
-        title: ""
+        title: "",
+        body:""
     }
 
     const validationSchema = Yup.object().shape({
-        title: Yup.string().max(50, '50文字以内で入力してください').required('入力必須です')
+        body: Yup.string().max(200, '200文字以内で入力してください').required('入力必須です')
     });
 
     return (
@@ -38,8 +39,6 @@ const CreateNote = () => {
                         <div>
                             <div>
                                 <TextField
-                                    error={errors.title && touched.title ? true : false}
-                                    helperText={errors.title && touched.title ? errors.title : ""}
                                     label="タイトル"
                                     type="text"
                                     name="title"
@@ -48,9 +47,18 @@ const CreateNote = () => {
                                     value={values.title}
                                 />
                             </div>
-                            <span className="text-red-400">
-                                {errors.title && touched.title}
-                            </span>
+                            <div>
+                                <TextField
+                                    error={errors.body && touched.body ? true : false}
+                                    helperText={errors.body && touched.body ? errors.body : ""}
+                                    label="本文"
+                                    type="text"
+                                    name="body"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.body}
+                                />
+                            </div>
                         </div>
                         <div className="m-2">
                             <Button variant="outlined" onClick={handleReset}>
@@ -67,4 +75,4 @@ const CreateNote = () => {
     )
 }
 
-export default CreateNote;
+export default CreateItem;
