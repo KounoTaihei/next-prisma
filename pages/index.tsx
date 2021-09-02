@@ -1,11 +1,15 @@
-import { PrismaClient } from '@prisma/client';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { signIn, signOut, useSession } from "next-auth/client";
-import { Button } from '@material-ui/core';
+import { Button, CircularProgress } from '@material-ui/core';
+import { PrismaClient } from '@prisma/client';
 
 const Home: NextPage = () => {
   const [ session, loading ] = useSession();
+
+  if(loading) {
+    return <span className="text-center"><CircularProgress /></span>
+  }
 
   return (
     <div>
@@ -18,12 +22,13 @@ const Home: NextPage = () => {
         {!session && (
           <>
             サインインしてください。 <br />
-            <Button variant="outlined" onClick={() => signIn()}>Sign in</Button>
+            <Button variant="outlined" onClick={() => signIn('google')}>Googleでサインイン</Button>
           </>
         )}
         {session && (
           <>
             サインイン完了。 {session.user?.name} <br />
+            <img src={session.user?.image?.toString()} />
             <Button variant="outlined" onClick={() => signOut()}>Sign out</Button>
           </>
         )}

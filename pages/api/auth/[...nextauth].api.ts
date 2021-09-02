@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
-import Adapters from "next-auth/adapters";
 import prisma from "../../../lib/prisma";
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { NextApiRequest, NextApiResponse } from "next-auth/internals/utils";
@@ -11,14 +10,14 @@ const options = {
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         }),
-    //　プロバイダーは何個でも指定できる。
-    // https://next-auth.js.org/getting-started/introduction で一覧がみれる
-    // 例：
-    // Providers.Twitter({
-    //   clientId: process.env.TWITTER_CLIENT_ID,
-    //   clientSecret: process.env.TWITTER_CLIENT_SECRET,
-    // }),
     ],
     adapter: PrismaAdapter(prisma),
+    callbacks: {
+        session: (session: any, user: any) => {
+            // user はデータベースに保存されている user オブジェクト
+            session.user.id = user.id;
+            return Promise.resolve(session);
+        },
+    },
 };
 export default (req: NextApiRequest, res: NextApiResponse) => NextAuth(req, res, options);

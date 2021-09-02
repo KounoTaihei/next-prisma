@@ -5,8 +5,8 @@ const Header = () => {
         <header className="p-2 bg-red-300">
             <nav>
                 <Link href="/"><a className="text-white p-2">Top</a></Link>
-                <Link href="/threads"><a className="text-white p-2">Threads</a></Link>
-                <Link href="/posts"><a className="text-white p-2">Posts</a></Link>
+                <Link href="/notes"><a className="text-white p-2">Notes</a></Link>
+                <Link href="/items"><a className="text-white p-2">Items</a></Link>
             </nav>
         </header>
     )

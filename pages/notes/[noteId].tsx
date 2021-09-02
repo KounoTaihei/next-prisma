@@ -1,7 +1,7 @@
 import React from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import axios from "axios";
-import { Thread } from "@prisma/client";
+import { Note } from "@prisma/client";
 import Link from "next/link";
 import { Button, Modal } from "@material-ui/core";
 import { useRouter } from "next/dist/client/router";
@@ -9,9 +9,9 @@ import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import prisma from "../../lib/prisma";
 
-const apiUrl = process.env.API_URL + "/threads";
+const apiUrl = process.env.API_URL + "/notes";
 
-const FindThread = ({ thread }: Props) => {
+const FindNote = ({ note }: Props) => {
     const router = useRouter();
     const [open, setOpen] = React.useState(false);
 
@@ -35,20 +35,20 @@ const FindThread = ({ thread }: Props) => {
         </div>
     )
 
-    async function deleteThread() {
-        if(confirm(`${thread.title}を削除しますか？`)) {
-            await axios.delete(`${apiUrl}/${thread.id}`).then(() => router.push('/threads'));
+    async function deleteNote() {
+        if(confirm(`${note.title}を削除しますか？`)) {
+            await axios.delete(`${apiUrl}/${note.id}`).then(() => router.push('/notes'));
         }
     }
 
     return (
         <>
-            <p>create: {thread.createdAt}</p>
-            <p>title: {thread.title}</p>
+            <p>create: {note.createdAt}</p>
+            <p>title: {note.title}</p>
             <div>
                 <Link href="#">
                     <a className="p-2">
-                        <Button variant="outlined" onClick={deleteThread}>Delete</Button>
+                        <Button variant="outlined" onClick={deleteNote}>Delete</Button>
                     </a>
                 </Link>
                 <span className="p-2">
@@ -66,30 +66,30 @@ const FindThread = ({ thread }: Props) => {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const threads: Thread[] = await prisma.thread.findMany();
-    const paths = threads.map(thread => `/threads/${thread.id}`);
+    const notes: Note[] = await prisma.note.findMany();
+    const paths = notes.map(note => `/notes/${note.id}`);
 
     return { paths, fallback: false }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-    const id = params?.threadId?.toString();
-    const res: Thread | null = await prisma.thread.findUnique({
+    const id = params?.noteId?.toString();
+    const res: Note | null = await prisma.note.findUnique({
         where: {
             id
         }
     });
-    const thread: Thread = await JSON.parse(JSON.stringify(res));
+    const note: Note = await JSON.parse(JSON.stringify(res));
     
     return {
         props: {
-            thread
+            note
         }
     }
 }
 
 interface Props {
-    thread: Thread
+    note: Note
 }
 
-export default FindThread;
+export default FindNote;

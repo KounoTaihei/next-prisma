@@ -3,9 +3,9 @@ import axios from "axios";
 import { Formik } from "formik";
 import * as Yup from 'yup';
 
-const apiUrl = process.env.API_URL + "/threads";
+const apiUrl = process.env.API_URL + "/notes";
 
-const CreateThread = () => {
+const CreateNote = () => {
     const initialValues = {
         title: ""
     }
@@ -66,4 +66,4 @@ const CreateThread = () => {
     )
 }
 
-export default CreateThread;
+export default CreateNote;

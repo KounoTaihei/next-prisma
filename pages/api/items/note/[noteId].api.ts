@@ -1,19 +1,19 @@
-import { Post } from '@prisma/client';
+import { Item } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../../lib/prisma';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Post[]>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Item[]>) {
     const method = req.method;
 
     switch (method) {
         case 'GET': {
-            const threadId = req.query.threadId.toString();
-            const posts: Post[] = await prisma.post.findMany({
+            const noteId = req.query.noteId.toString();
+            const items: Item[] = await prisma.item.findMany({
                 where: {
-                    threadId: threadId
+                    noteId: noteId
                 }
             });
-            res.status(200).json(posts);
+            res.status(200).json(items);
             break;
         }
         default: {

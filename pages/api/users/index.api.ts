@@ -1,4 +1,4 @@
-import { Thread, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 
