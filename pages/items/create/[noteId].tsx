@@ -1,4 +1,5 @@
-import { Button, CircularProgress, TextField } from "@material-ui/core";
+import { Button, CircularProgress, TextareaAutosize } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import { Note } from "@prisma/client";
 import axios from "axios";
 import { Formik } from "formik";
@@ -52,17 +53,18 @@ const CreateItem = ({ note }: Props) => {
                     }) => (
                         <form onSubmit={handleSubmit}>
                             <div>
-                                <div>
-                                    <TextField
-                                        error={errors.body && touched.body ? true : false}
-                                        helperText={errors.body && touched.body ? errors.body : ""}
-                                        label="本文"
-                                        type="text"
+                                <div className="w-96">
+                                    <TextareaAutosize
+                                        placeholder="本文を入力してください"
                                         name="body"
+                                        aria-label="minimum height"
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.body}
+                                        minRows={4}
+                                        className="border w-full"
                                     />
+                                    {errors.body && touched.body && <Alert severity="error">入力必須です</Alert>}
                                 </div>
                             </div>
                             <div className="m-2">
