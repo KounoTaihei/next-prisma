@@ -15,9 +15,18 @@ const CreateItem = ({ note }: Props) => {
     const router = useRouter();
     const [ submitting, setSubmitting ] = useState<boolean>(false);
 
+    const [ fileUrl, setFileUrl ] = useState<string>('');
+
+    function processImage(event: any){
+        const imageFile = event.target?.files[0];
+        const imageUrl = URL.createObjectURL(imageFile);
+        setFileUrl(imageUrl);
+    }
+
     const initialValues = {
+        noteId: note.id,
         body:"",
-        noteId: note.id
+        image: ""
     }
 
     const validationSchema = Yup.object().shape({
@@ -65,6 +74,15 @@ const CreateItem = ({ note }: Props) => {
                                         className="border w-full"
                                     />
                                     {errors.body && touched.body && <Alert severity="error">入力必須です</Alert>}
+                                </div>
+                                <div className="w-96">
+                                    <img src={fileUrl} />
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        name="image"
+                                        onChange={processImage}
+                                    />
                                 </div>
                             </div>
                             <div className="m-2">
