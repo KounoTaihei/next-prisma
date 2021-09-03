@@ -23,11 +23,20 @@ model Note {
 model Item {
   id String @id @default(cuid())
   body String
-  image String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @map(name: "updatedAt")
   note Note @relation(fields: [noteId], references: [id])
   noteId String
+  images ItemImage[]
+}
+
+model ItemImage {
+  id String @id @default(cuid())
+  url String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @map(name: "updatedAt")
+  item Item @relation(fields: [itemId], references: [id])
+  itemId String
 }
 
 // 以下認証用
