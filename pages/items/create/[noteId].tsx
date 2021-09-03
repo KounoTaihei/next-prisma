@@ -15,18 +15,19 @@ const CreateItem = ({ note }: Props) => {
     const router = useRouter();
     const [ submitting, setSubmitting ] = useState<boolean>(false);
 
-    const [ fileUrl, setFileUrl ] = useState<string>('');
+    const [ imageQuantity, setImageQuantity ] = useState<number>(0);
+    const [ previewUrls, setPreviewUrls ] = useState<string[]>([]);
 
-    function processImage(event: any){
+    function setPreview(event: any){
         const imageFile = event.target?.files[0];
         const imageUrl = URL.createObjectURL(imageFile);
-        setFileUrl(imageUrl);
+        setPreviewUrls([ ...previewUrls, imageUrl ]);
     }
 
     const initialValues = {
         noteId: note.id,
         body:"",
-        image: ""
+        image: []
     }
 
     const validationSchema = Yup.object().shape({
@@ -76,13 +77,18 @@ const CreateItem = ({ note }: Props) => {
                                     {errors.body && touched.body && <Alert severity="error">入力必須です</Alert>}
                                 </div>
                                 <div className="w-96">
-                                    <img src={fileUrl} />
+                                    <img src={previewUrls[0]} />
                                     <input
                                         type="file"
                                         accept="image/*"
                                         name="image"
-                                        onChange={processImage}
+                                        onChange={setPreview}
                                     />
+                                    <div>
+                                    {imageQuantity}
+                                    <button onClick={() => setImageQuantity(imageQuantity + 1)}>プラス</button>
+                                    <button onClick={() => setImageQuantity(imageQuantity - 1)}>マイナス</button>
+                                    </div>
                                 </div>
                             </div>
                             <div className="m-2">
