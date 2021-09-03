@@ -48,7 +48,13 @@ const CreateItem = ({ note }: Props) => {
                     onSubmit = {async (values) => {
                         setSubmitting(true);
                         await axios.post(`${apiUrl}/note/${note.id}`, values)
-                        .then(() => router.push(`/items/note/${note.id}`));
+                        .then(() => {
+                            router.push(`/items/note/${note.id}`);
+                        })
+                        .catch(err => {
+                            setSubmitting(false);
+                            console.log(err);
+                        });
                     }}
                 >
                     {({

@@ -3,8 +3,6 @@ import Head from 'next/head';
 import { signIn, signOut, useSession } from "next-auth/client";
 import { Button, CircularProgress } from '@material-ui/core';
 import { PrismaClient } from '@prisma/client';
-import Image from 'next/image';
-import eximg from '../public/fakeimg-2.webp';
 
 const Home: NextPage = () => {
   const [ session, loading ] = useSession();
@@ -35,7 +33,6 @@ const Home: NextPage = () => {
           </>
         )}
       </div>
-      <Image src={eximg} />
     </div>
   )
 }
