@@ -1,4 +1,4 @@
-import { Button, CircularProgress, TextareaAutosize } from "@material-ui/core";
+import { Button, CircularProgress, TextareaAutosize, TextField } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { Note } from "@prisma/client";
 import axios from "axios";
@@ -15,7 +15,6 @@ const CreateItem = ({ note }: Props) => {
     const router = useRouter();
     const [ submitting, setSubmitting ] = useState<boolean>(false);
 
-    const [ imageQuantity, setImageQuantity ] = useState<number>(0);
     const [ previewUrls, setPreviewUrls ] = useState<string[]>([]);
 
     function setPreview(event: any){
@@ -24,10 +23,14 @@ const CreateItem = ({ note }: Props) => {
         setPreviewUrls([ ...previewUrls, imageUrl ]);
     }
 
-    const initialValues = {
+    const initialValues: {
+        noteId: string
+        title : string
+        body : string
+    } = {
         noteId: note.id,
-        body:"",
-        image: []
+        title: "",
+        body: "",
     }
 
     const validationSchema = Yup.object().shape({
@@ -69,9 +72,20 @@ const CreateItem = ({ note }: Props) => {
                     }) => (
                         <form onSubmit={handleSubmit}>
                             <div>
-                                <div className="w-96">
+                                <div className="w-96 my-2">
+                                    <TextField
+                                        label="タイトル"
+                                        placeholder="必須ではありません"
+                                        type="text"
+                                        name="title"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.title}
+                                    />
+                                </div>
+                                <div className="w-96 my-2">
                                     <TextareaAutosize
-                                        placeholder="本文を入力してください"
+                                        placeholder="本文"
                                         name="body"
                                         aria-label="minimum height"
                                         onChange={handleChange}
@@ -90,19 +104,14 @@ const CreateItem = ({ note }: Props) => {
                                         name="image"
                                         onChange={setPreview}
                                     />
-                                    <div>
-                                    {imageQuantity}
-                                    <button onClick={() => setImageQuantity(imageQuantity + 1)}>プラス</button>
-                                    <button onClick={() => setImageQuantity(imageQuantity - 1)}>マイナス</button>
-                                    </div>
                                 </div>
                             </div>
                             <div className="m-2">
                                 <Button variant="outlined" onClick={handleReset}>
-                                    Clear
+                                    キャンセル
                                 </Button>
                                 <Button variant="outlined" color="primary" type="submit" disabled={isSubmitting}>
-                                    Create
+                                    作成
                                 </Button>
                             </div>
                         </form>

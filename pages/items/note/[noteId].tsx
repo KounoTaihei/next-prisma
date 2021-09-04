@@ -5,7 +5,7 @@ import { formatDate } from "../../../functions/date.format";
 import prisma from "../../../lib/prisma";
 import Image from "next/image";
 import imageurl from "../../../public/20141126_unsplash.webp";
-import { Avatar, Box, Tab, Tabs, Typography } from "@material-ui/core";
+import { Avatar, Box, Tab, Tabs } from "@material-ui/core";
 import { useState } from "react";
 
 const apiUrl = process.env.API_URL;
@@ -28,9 +28,11 @@ function TabPanel(props: TabPanelProps) {
         {...other}
       >
         {value === index && (
-          <Box className="p-4">
-            <Typography>{children}</Typography>
-          </Box>
+            <div className="p-4">
+                <Box>
+                    <span>{children}</span>
+                </Box>
+            </div>
         )}
       </div>
     );
@@ -54,8 +56,10 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
         <>
             <div className="text-center p-8">
                 <div className="flex justify-center items-center">
-                    <Avatar alt="" src={note.user.image} className="mr-2" />
-                    <p>{note.user.name}</p>
+                    <Avatar>
+                        {note.user.image && <Image src={note.user.image} layout="fill" loading="lazy" />}
+                    </Avatar>
+                    <p className="p-2">{note.user.name}</p>
                 </div>
                 <p>{note.title}({formatDate( note.createdAt )})</p>
                 <Link href={`/items/create/${note.id}`}><a className="float-right">このノートにアイテムを追加する</a></Link>
@@ -73,19 +77,25 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                     {items.map((item, i) => 
                         <Tab
                             key={item.id}
-                            label={formatDate(item.createdAt)}
+                            label={
+                                <div>
+                                    <p>{formatDate(item.createdAt)}</p>
+                                    {item.title && <p>{item.title}</p>}
+                                </div>
+                            }
                             {...a11yProps(i)}
                         />
                     )}
                     </Tabs>
                     {items.map((item, i) =>
                         <TabPanel key={item.id} value={value} index={i}>
+                            {item.title && <div>{item.title}</div>}
                             <div className="flex justify-start">
                                 <span className="w-1/4 p-2">
-                                    <Image src={imageurl} />
+                                    <Image src={imageurl} loading="lazy" />
                                 </span>
                                 <span className="w-1/4 p-2">
-                                    <Image src={imageurl} />
+                                    <Image src={imageurl} loading="lazy" />
                                 </span>
                             </div>
                             <div className="p-2">

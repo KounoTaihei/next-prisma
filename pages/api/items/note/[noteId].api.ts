@@ -11,6 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             const body: Prisma.ItemCreateInput = req.body;
             const item: Item = await prisma.item.create({
                 data: {
+                    title: body.title,
                     body: body.body,
                     noteId: noteId
                 }

@@ -1,6 +1,7 @@
-import { AppBar, Avatar, Chip, Toolbar } from '@material-ui/core';
+import { AppBar, Avatar, Chip } from '@material-ui/core';
 import { useSession } from 'next-auth/client';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Header = () => {
     const [ session ] = useSession();
@@ -21,7 +22,11 @@ const Header = () => {
                     {session && (
                         <>
                             <Chip
-                                avatar={<Avatar alt="ログインユーザーの画像" src={session.user.image} />}
+                                avatar={
+                                    <Avatar>
+                                        <Image alt="ログインユーザーの画像" src={session.user.image} layout="fill" loading="lazy" />
+                                    </Avatar>
+                                }
                                 label={session.user.name}
                                 className="hover:opacity-90"
                             />
