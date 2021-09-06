@@ -7,6 +7,9 @@ import Image from "next/image";
 import imageurl from "../../../public/20141126_unsplash.webp";
 import { Avatar, Box, Tab, Tabs } from "@material-ui/core";
 import { useState } from "react";
+import { useSession } from "next-auth/client";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const apiUrl = process.env.API_URL;
 
@@ -47,6 +50,7 @@ function a11yProps(index: any) {
 
 const FindItemsByNoteId = ({ note, items }: Props) => {
     const [value, setValue] = useState<number>(0);
+    const [ session ] = useSession();
 
     const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
         setValue(newValue);
@@ -62,7 +66,9 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                     <p className="p-2">{note.user.name}</p>
                 </div>
                 <p>{note.title}({formatDate( note.createdAt )})</p>
-                <Link href={`/items/create/${note.id}`}><a className="float-right">このノートにアイテムを追加する</a></Link>
+                {session?.user.id === note.userId &&
+                    <Link href={`/items/create/${note.id}`}><a className="float-right"><FontAwesomeIcon icon={faPlus} /></a></Link>
+                }
             </div>
             {items.length > 0 ? 
                 <div className="flex">
