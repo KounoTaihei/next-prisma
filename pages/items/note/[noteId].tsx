@@ -5,56 +5,51 @@ import { formatDate } from "../../../functions/date.format";
 import prisma from "../../../lib/prisma";
 import Image from "next/image";
 import imageurl from "../../../public/20141126_unsplash.webp";
-import { Avatar, Box, Tab, Tabs } from "@material-ui/core";
+import { Avatar, Tab, Tabs } from "@material-ui/core";
+import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineSeparator } from '@material-ui/lab';
 import { useState } from "react";
 import { useSession } from "next-auth/client";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from "next/dist/client/router";
 
 const apiUrl = process.env.API_URL;
-
-interface TabPanelProps {
-    children?: React.ReactNode;
-    index: any;
-    value: any;
-}
-
-function TabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
-  
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`vertical-tabpanel-${index}`}
-        aria-labelledby={`vertical-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-            <div className="p-4">
-                <Box>
-                    <span>{children}</span>
-                </Box>
-            </div>
-        )}
-      </div>
-    );
-}
-
-function a11yProps(index: any) {
-    return {
-      id: `vertical-tab-${index}`,
-      'aria-controls': `vertical-tabpanel-${index}`,
-    };
-}
 
 const FindItemsByNoteId = ({ note, items }: Props) => {
     const [value, setValue] = useState<number>(0);
     const [ session ] = useSession();
+    const router = useRouter();
 
     const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
         setValue(newValue);
     };
+
+    function a11yProps(index: any) {
+        return {
+          id: `scrollable-auto-tab-${index}`,
+          'aria-controls': `scrollable-auto-tabpanel-${index}`,
+        };
+    }
+
+    const timelineContent = ( item: Item ) => {
+        return (
+            <>
+                <p>{formatDate(item.createdAt)}</p>
+                <div>
+                    <Image src={imageurl} />
+                    <Image src={imageurl} />
+                    <Image src={imageurl} />
+                    <Image src={imageurl} />
+                </div>
+                <p>{item.title}</p>
+                <p>{item.body}</p>
+            </>
+        )
+    }
+
+    const scrollToItem = (id: string) => {
+        router.push(`#${id}`);
+    }
 
     return (
         <>
@@ -71,45 +66,36 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                 }
             </div>
             {items.length > 0 ? 
-                <div className="flex">
+                <>
                     <Tabs
-                        orientation="vertical"
-                        variant="scrollable"
                         value={value}
                         onChange={handleChange}
-                        aria-label="Vertical tabs example"
-                        className="border-r"
+                        variant="scrollable"
+                        scrollButtons="on"
                     >
-                    {items.map((item, i) => 
-                        <Tab
-                            key={item.id}
-                            label={
-                                <div>
-                                    <p>{formatDate(item.createdAt)}</p>
-                                    {item.title && <p>{item.title}</p>}
-                                </div>
-                            }
-                            {...a11yProps(i)}
-                        />
-                    )}
+                        {items.map((item, i) =>
+                            <Tab
+                                key={i}
+                                label={item.id}
+                                {...a11yProps(i)}
+                                onClick={() => scrollToItem(item.id)}
+                            />
+                        )}
                     </Tabs>
-                    {items.map((item, i) =>
-                        <TabPanel key={item.id} value={value} index={i}>
-                            {item.title && <div>{item.title}</div>}
-                            <div className="flex justify-start">
-                                <span className="w-1/4 p-2">
-                                    <Image src={imageurl} loading="lazy" />
-                                </span>
-                                <span className="w-1/4 p-2">
-                                    <Image src={imageurl} loading="lazy" />
-                                </span>
+                    <Timeline>
+                        {items.map((item, i) =>
+                            <div id={item.id} key={i}>
+                                <TimelineItem>
+                                    <TimelineSeparator>
+                                        <TimelineDot />
+                                        {items.length !== i + 1 ? <TimelineConnector /> : null}
+                                    </TimelineSeparator>
+                                    <TimelineContent>{timelineContent(item)}</TimelineContent>
+                                </TimelineItem>
                             </div>
-                            <div className="p-2">
-                                {item.body}
-                            </div>
-                        </TabPanel>
-                    )}
-                </div>
+                        )}
+                    </Timeline>
+                </>
                 :
                 <p>アイテムはありません</p>
             }
