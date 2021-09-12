@@ -14,9 +14,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { animateScroll as Scroll } from "react-scroll";
 
 const FindItemsByNoteId = ({ note, items }: Props) => {
-    const [value, setValue] = useState<number>(0);
+    const [ value, setValue ] = useState<number>(0);
     const [ session ] = useSession();
 
+    const useStyles = makeStyles({
+        tabs: {
+            position: "sticky",
+            top: 0,
+            backgroundColor: "rgba(255,255,255,0.9)",
+            zIndex: 10
+        },
+        timeline: {
+            "&:before": {
+                display: "none"
+            }
+        }
+    });
+
+    const classes = useStyles();
+
+    /** タブの切り替え */
     const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
         setValue(newValue);
     };
@@ -27,16 +44,19 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
           'aria-controls': `scrollable-auto-tabpanel-${index}`,
         };
     }
+    /** --- */
 
+    /** タイムライン */
     const timelineContent = ( item: Item ) => {
         return (
             <>
                 <div>{formatDate(item.createdAt)}</div>
-                <div>
-                    <Image src={imageurl} />
-                    <Image src={imageurl} />
-                    <Image src={imageurl} />
-                    <Image src={imageurl} />
+                <div className="flex flex-wrap">
+                    {paths.map((path, i) =>
+                        <span key={i} className="w-1/2 p-1">
+                            <Image src={imageurl} />
+                        </span>
+                    )}
                 </div>
                 <p>{item.title}</p>
                 <p>{item.body}</p>
@@ -44,30 +64,24 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
         )
     }
 
-    const useStyles = makeStyles({
-        tabs: {
-            position: "sticky",
-            top: 0,
-            backgroundColor: "#fff",
-            zIndex: 10
-        },
-        timeline: {
-            "&:before": {
-                display: "none"
-            }
-        },
-    });
-
-    const classes = useStyles();
-
     const scrollToItem = (id: string) => {
         if(!document.getElementById(id) || !document.getElementById('tabs')) {
             return ;
         }
         const tabsHeight: number = document.getElementById('tabs')?.clientHeight!;
         const height: number = document.getElementById(id)?.getBoundingClientRect().top!;
-        Scroll.scrollTo(height - tabsHeight);
+        Scroll.scrollTo(height + window.pageYOffset - tabsHeight);
     }
+    /** --- */
+
+    /** 画像リスト */
+    const paths: string[] = [
+        "20141126_unsplash.webp",
+        "20141126_unsplash.webp",
+        "20141126_unsplash.webp",
+        "20141126_unsplash.webp",
+    ];
+    /** --- */
 
     return (
         <>
@@ -91,9 +105,7 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                         onChange={handleChange}
                         variant="scrollable"
                         scrollButtons="on"
-                        classes={{
-                            root: classes.tabs
-                        }}
+                        className={classes.tabs}
                     >
                         {items.map((item, i) =>
                             <Tab
@@ -108,9 +120,7 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                         {items.map((item, i) =>
                             <div id={item.id} key={i}>
                                 <TimelineItem
-                                    classes={{
-                                        root: classes.timeline
-                                    }}
+                                    className={classes.timeline}
                                 >
                                     <TimelineSeparator>
                                         <TimelineDot />
