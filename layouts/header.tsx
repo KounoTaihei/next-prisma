@@ -83,7 +83,7 @@ const Header = () => {
                     <nav>
                         {!session && (
                             <>
-                                <Avatar>
+                                <Avatar className={classes.avatar}>
                                     <Image alt="未ログインユーザーの画像" src={humanImage} layout="fill" loading="lazy" />
                                 </Avatar>
                             </>
