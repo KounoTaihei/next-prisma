@@ -5,7 +5,7 @@ import { getFormattedDate } from "../../../functions/get_formatted_date";
 import prisma from "../../../lib/prisma";
 import Image from "next/image";
 import imageurl from "../../../public/20141126_unsplash.webp";
-import { Avatar, Card, CardActions, CardContent, CardHeader, IconButton, ImageList, ImageListItem, makeStyles, Tab, Tabs } from "@material-ui/core";
+import { Avatar, Card, CardActions, CardContent, CardHeader, IconButton, ImageList, ImageListItem, List, ListItem, ListItemAvatar, ListItemText, makeStyles, Tab, Tabs } from "@material-ui/core";
 import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineSeparator } from '@material-ui/lab';
 import { useState } from "react";
 import { useSession } from "next-auth/client";
@@ -41,8 +41,14 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
         imageList: {
             flexWrap: 'nowrap',
         },
+        topIcon: {
+            fontSize: "1em"
+        },
         icon: {
             fontSize: "1.2em"
+        },
+        titleText: {
+            width: "fit-content"
         }
     });
 
@@ -132,17 +138,40 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
 
     return (
         <>
-            <div className="text-center p-8">
-                <div className="flex justify-center items-center">
-                    <Avatar>
-                        {note.user.image && <Image src={note.user.image} layout="fill" loading="lazy" />}
-                    </Avatar>
-                    <p className="p-2">{note.user.name}</p>
-                </div>
-                <p>{note.title}({getFormattedDate( note.createdAt )})</p>
-                {session?.user.id === note.userId &&
-                    <Link href={`/items/create/${note.id}`}><a className="float-right"><FontAwesomeIcon icon={faPlus} /></a></Link>
-                }
+            <div className="text-center p-4">
+                <List>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <Image src={note.user.image!} layout="fill" loading="lazy" />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                            className={classes.titleText}
+                            primary={note.title}
+                            secondary={
+                                <>
+                                    {note.user.name}が{getFormattedDate(note.createdAt)}に作成
+                                </>
+                            }
+                        />
+                    </ListItem>
+                </List>
+                {session?.user.id === note.userId && (
+                    <div>
+                        <Link href={`/items/create/${note.id}`}>
+                            <IconButton className={classes.topIcon}>
+                                <FontAwesomeIcon icon={faPlus} />
+                            </IconButton>
+                        </Link>
+                        <IconButton className={classes.topIcon}>
+                            <FontAwesomeIcon icon={faPen} />
+                        </IconButton>
+                        <IconButton className={classes.topIcon}>
+                            <FontAwesomeIcon icon={faTrash} />
+                        </IconButton>
+                    </div>
+                )}
             </div>
             {items.length > 0 ? 
                 <>
