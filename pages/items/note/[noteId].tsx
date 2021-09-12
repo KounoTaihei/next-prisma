@@ -5,11 +5,11 @@ import { getFormattedDate } from "../../../functions/get_formatted_date";
 import prisma from "../../../lib/prisma";
 import Image from "next/image";
 import imageurl from "../../../public/20141126_unsplash.webp";
-import { Avatar, makeStyles, Tab, Tabs } from "@material-ui/core";
+import { Avatar, Card, CardActions, CardContent, CardHeader, IconButton, ImageList, ImageListItem, makeStyles, Tab, Tabs } from "@material-ui/core";
 import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineSeparator } from '@material-ui/lab';
 import { useState } from "react";
 import { useSession } from "next-auth/client";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisV, faHeart, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { animateScroll as Scroll } from "react-scroll";
 
@@ -28,6 +28,21 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
             "&:before": {
                 display: "none"
             }
+        },
+        cardContent: {
+            whiteSpace: "pre-wrap"
+        },
+        imageListWrapper: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-around',
+            overflow: 'hidden',
+        },
+        imageList: {
+            flexWrap: 'nowrap',
+        },
+        icon: {
+            fontSize: "1.2em"
         }
     });
 
@@ -50,16 +65,48 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
     const timelineContent = ( item: Item ) => {
         return (
             <>
-                <div>{getFormattedDate(item.createdAt)}</div>
-                <div className="flex flex-wrap">
-                    {paths.map((path, i) =>
-                        <span key={i} className="w-1/2 p-1">
-                            <Image src={imageurl} />
-                        </span>
-                    )}
-                </div>
-                <p>{item.title}</p>
-                <p>{item.body}</p>
+                <Card>
+                    <CardHeader
+                        subheader={
+                            <>
+                                <span className="text-black">{item.title}</span><br></br>
+                                {getFormattedDate(item.createdAt)}
+                            </>
+                        }
+                        action={
+                            <IconButton>
+                                <FontAwesomeIcon icon={faEllipsisV} />
+                            </IconButton>
+                        }
+                    />
+                    <div className={classes.imageListWrapper}>
+                        <ImageList className={classes.imageList} cols={1.1}>
+                            {paths.map((path, i) =>
+                                <ImageListItem key={i}>
+                                    <Image src={imageurl} />
+                                </ImageListItem>
+                            )}
+                        </ImageList>
+                    </div>
+                    <CardContent className={classes.cardContent}>
+                        {item.body}
+                    </CardContent>
+                    <div className="flex justify-between">
+                        <CardActions>
+                            <IconButton className={classes.icon}>
+                                <FontAwesomeIcon icon={faHeart} />
+                            </IconButton>
+                        </CardActions>
+                        <CardActions>
+                            <IconButton className={classes.icon}>
+                                <FontAwesomeIcon icon={faPen} />
+                            </IconButton>
+                            <IconButton className={classes.icon}>
+                                <FontAwesomeIcon icon={faTrash} />
+                            </IconButton>
+                        </CardActions>
+                    </div>
+                </Card>
             </>
         )
     }

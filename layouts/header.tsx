@@ -22,7 +22,8 @@ const Header = () => {
                 justifyContent: "space-between"
             },
             avatar: {
-                border: "white 1px solid"
+                border: "white 1px solid",
+                backgroundColor: "#fff"
             },
             menu: {
                 width: "70vw"
@@ -40,30 +41,19 @@ const Header = () => {
 
     const menuContents = (
         <List className={classes.menu}>
-            <Link href="/">
+            <Link href="/notes">
                 <ListItem
                     button
                     className={classes.menuItem}
                     onClick={() => setMenuOpening(false)}
                 >
-                    <Button>
-                        Top
+                    <Button
+                        startIcon={<FontAwesomeIcon icon={faBookOpen} />}
+                    >
+                        ノート一覧
                     </Button>
                 </ListItem>
             </Link>
-            <Link href="/notes">
-            <ListItem
-                button
-                className={classes.menuItem}
-                onClick={() => setMenuOpening(false)}
-            >
-                <Button
-                    startIcon={<FontAwesomeIcon icon={faBookOpen} />}
-                >
-                    ノート一覧
-                </Button>
-            </ListItem>
-                </Link>
         </List>
     )
     /** --- */
@@ -81,18 +71,21 @@ const Header = () => {
                         </IconButton>
                     </nav>
                     <nav>
-                        {!session && (
+                        {!session ? (
                             <>
-                                <Avatar className={classes.avatar}>
-                                    <Image alt="未ログインユーザーの画像" src={humanImage} layout="fill" loading="lazy" />
-                                </Avatar>
+                                <Link href="/login">
+                                    <Avatar className={classes.avatar}>
+                                        <Image alt="未ログインユーザーの画像" src={humanImage} layout="fill" loading="lazy" />
+                                    </Avatar>
+                                </Link>
                             </>
-                        )}
-                        {session && (
+                        ) : (
                             <>
-                                <Avatar className={classes.avatar}>
-                                    <Image alt="ログインユーザーの画像" src={session.user.image} layout="fill" loading="lazy" />
-                                </Avatar>
+                                <Link href="/profile">
+                                    <Avatar className={classes.avatar}>
+                                        <Image alt="ログインユーザーの画像" src={session.user.image} layout="fill" loading="lazy" />
+                                    </Avatar>
+                                </Link>
                             </>
                         )}
                     </nav>
