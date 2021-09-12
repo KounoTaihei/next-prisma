@@ -5,20 +5,17 @@ import { formatDate } from "../../../functions/date.format";
 import prisma from "../../../lib/prisma";
 import Image from "next/image";
 import imageurl from "../../../public/20141126_unsplash.webp";
-import { Avatar, Tab, Tabs } from "@material-ui/core";
+import { Avatar, makeStyles, Tab, Tabs } from "@material-ui/core";
 import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineSeparator } from '@material-ui/lab';
 import { useState } from "react";
 import { useSession } from "next-auth/client";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRouter } from "next/dist/client/router";
-
-const apiUrl = process.env.API_URL;
+import { animateScroll as Scroll } from "react-scroll";
 
 const FindItemsByNoteId = ({ note, items }: Props) => {
     const [value, setValue] = useState<number>(0);
     const [ session ] = useSession();
-    const router = useRouter();
 
     const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
         setValue(newValue);
@@ -34,7 +31,7 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
     const timelineContent = ( item: Item ) => {
         return (
             <>
-                <p>{formatDate(item.createdAt)}</p>
+                <div>{formatDate(item.createdAt)}</div>
                 <div>
                     <Image src={imageurl} />
                     <Image src={imageurl} />
@@ -47,8 +44,29 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
         )
     }
 
+    const useStyles = makeStyles({
+        tabs: {
+            position: "sticky",
+            top: 0,
+            backgroundColor: "#fff",
+            zIndex: 10
+        },
+        timeline: {
+            "&:before": {
+                display: "none"
+            }
+        },
+    });
+
+    const classes = useStyles();
+
     const scrollToItem = (id: string) => {
-        router.push(`#${id}`);
+        if(!document.getElementById(id) || !document.getElementById('tabs')) {
+            return ;
+        }
+        const tabsHeight: number = document.getElementById('tabs')?.clientHeight!;
+        const height: number = document.getElementById(id)?.getBoundingClientRect().top!;
+        Scroll.scrollTo(height - tabsHeight);
     }
 
     return (
@@ -68,10 +86,14 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
             {items.length > 0 ? 
                 <>
                     <Tabs
+                        id="tabs"
                         value={value}
                         onChange={handleChange}
                         variant="scrollable"
                         scrollButtons="on"
+                        classes={{
+                            root: classes.tabs
+                        }}
                     >
                         {items.map((item, i) =>
                             <Tab
@@ -85,7 +107,11 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                     <Timeline>
                         {items.map((item, i) =>
                             <div id={item.id} key={i}>
-                                <TimelineItem>
+                                <TimelineItem
+                                    classes={{
+                                        root: classes.timeline
+                                    }}
+                                >
                                     <TimelineSeparator>
                                         <TimelineDot />
                                         {items.length !== i + 1 ? <TimelineConnector /> : null}
