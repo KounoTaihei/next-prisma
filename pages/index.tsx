@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { signIn, signOut, useSession } from "next-auth/client";
-import { Button, CircularProgress } from '@material-ui/core';
+import { useSession } from "next-auth/client";
+import { CircularProgress } from '@material-ui/core';
 import { PrismaClient } from '@prisma/client';
 import { useEffect } from 'react';
 import { useRouter } from 'next/dist/client/router';
@@ -14,14 +14,13 @@ const Home: NextPage = () => {
     return <span className="text-center"><CircularProgress /></span>
   }
 
-  useEffect(() => {
+  const redirect = () => {
     if(session) {
       router.push('/notes');
-    }
-    if(!session) {
+    } else {
       router.push('/login');
     }
-  },[])
+  }
 
   return (
     <div>

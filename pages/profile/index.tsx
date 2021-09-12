@@ -11,12 +11,6 @@ const Profile = () => {
         return <span className="text-center"><CircularProgress /></span>
     }
 
-    useEffect(() => {
-        if(!session) {
-            router.push('/login');
-        }
-    });
-
     return (
         <>
             {session?.user.name}

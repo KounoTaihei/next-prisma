@@ -11,12 +11,6 @@ const Login = () => {
         return <span className="text-center"><CircularProgress /></span>
     }
 
-    useEffect(() => {
-        if(session) {
-            router.push('/notes');
-        }
-    },[])
-
     return (
         <>
             <Button variant="outlined" onClick={() => signIn('google')}>Googleでサインイン</Button>
