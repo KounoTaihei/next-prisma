@@ -1,7 +1,7 @@
 import { Item, Note, User } from "@prisma/client";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
-import { formatDate } from "../../../functions/date.format";
+import { formatDate } from "../../../functions/get_formatted_date";
 import prisma from "../../../lib/prisma";
 import Image from "next/image";
 import imageurl from "../../../public/20141126_unsplash.webp";

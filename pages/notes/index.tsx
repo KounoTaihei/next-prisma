@@ -5,9 +5,12 @@ import Link from "next/link";
 import { Avatar, Button, List, ListItem, ListItemAvatar, ListItemText } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Image from 'next/image';
-import { formatDate } from "../../functions/date.format";
+import { getFormattedDate } from "../../functions/get_formatted_date";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { getLatestDate } from "../../functions/get_latest_date";
+import { useEffect } from "react";
+import { getNoteListSortedByItemCreatedAt } from "../../functions/get_note_list_sorted_by_item_created_at";
 
 const Notes = ({ notes }: Props) => {
     const useStyles = makeStyles(() =>
@@ -23,8 +26,8 @@ const Notes = ({ notes }: Props) => {
         <>
             <Link href="/notes/create"><Button>add note</Button></Link>
             <List>
-                {notes.map(note =>
-                    <Link href={`/items/note/${note.id}`}>
+                {getNoteListSortedByItemCreatedAt(notes).map(note =>
+                    <Link href={`/items/note/${note.id}`} key={note.id}>
                         <Button className={classes.button}>
                             <ListItem key={note.id}>
                                 <ListItemAvatar>
@@ -41,7 +44,12 @@ const Notes = ({ notes }: Props) => {
                                     secondary={
                                         <>
                                             {note.user.name}<br></br>
-                                            <FontAwesomeIcon icon={faPen} className="mr-1" />{formatDate(note.createdAt)}
+                                            {note.items.length ?
+                                                <>
+                                                    <FontAwesomeIcon icon={faPen} className="mr-1" />
+                                                    {getFormattedDate(getLatestDate(note.items.map(item => item.createdAt)))}
+                                                </>
+                                            : ""}
                                         </>
                                     }
                                     />
@@ -73,7 +81,7 @@ export const getStaticProps: GetStaticProps = async () => {
     }
 }
 
-interface NoteWithUserAndItems extends Note {
+export interface NoteWithUserAndItems extends Note {
     user: User
     items: Item[]
 }
