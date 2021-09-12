@@ -1,7 +1,7 @@
 import { Item, Note, User } from "@prisma/client";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
-import { formatDate } from "../../../functions/get_formatted_date";
+import { getFormattedDate } from "../../../functions/get_formatted_date";
 import prisma from "../../../lib/prisma";
 import Image from "next/image";
 import imageurl from "../../../public/20141126_unsplash.webp";
@@ -50,7 +50,7 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
     const timelineContent = ( item: Item ) => {
         return (
             <>
-                <div>{formatDate(item.createdAt)}</div>
+                <div>{getFormattedDate(item.createdAt)}</div>
                 <div className="flex flex-wrap">
                     {paths.map((path, i) =>
                         <span key={i} className="w-1/2 p-1">
@@ -92,7 +92,7 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                     </Avatar>
                     <p className="p-2">{note.user.name}</p>
                 </div>
-                <p>{note.title}({formatDate( note.createdAt )})</p>
+                <p>{note.title}({getFormattedDate( note.createdAt )})</p>
                 {session?.user.id === note.userId &&
                     <Link href={`/items/create/${note.id}`}><a className="float-right"><FontAwesomeIcon icon={faPlus} /></a></Link>
                 }
