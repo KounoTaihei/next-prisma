@@ -83,11 +83,6 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                                 {getFormattedDate(item.createdAt)}
                             </>
                         }
-                        action={
-                            <IconButton>
-                                <FontAwesomeIcon icon={faEllipsisV} />
-                            </IconButton>
-                        }
                     />
                     <div className={classes.imageListWrapper}>
                         <ImageList className={classes.imageList} cols={1.1}>
@@ -103,17 +98,23 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                     </CardContent>
                     <div className="flex justify-between">
                         <CardActions>
-                            <IconButton className={classes.icon}>
-                                <FontAwesomeIcon icon={faHeart} />
-                            </IconButton>
+                            {session?.user.id !== note.userId && (
+                                <IconButton className={classes.icon}>
+                                    <FontAwesomeIcon icon={faHeart} />
+                                </IconButton>
+                            )}
                         </CardActions>
                         <CardActions>
-                            <IconButton className={classes.icon}>
-                                <FontAwesomeIcon icon={faPen} />
-                            </IconButton>
-                            <IconButton className={classes.icon}>
-                                <FontAwesomeIcon icon={faTrash} />
-                            </IconButton>
+                            {session?.user.id === note.userId && (
+                                <>
+                                    <IconButton className={classes.icon}>
+                                        <FontAwesomeIcon icon={faPen} />
+                                    </IconButton>
+                                    <IconButton className={classes.icon}>
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </IconButton>
+                                </>
+                            )}
                         </CardActions>
                     </div>
                 </Card>
@@ -203,7 +204,7 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                         {items.map((item, i) =>
                             <Tab
                                 key={i}
-                                label={item.id}
+                                label={item.title}
                                 {...a11yProps(i)}
                                 onClick={() => scrollToItem(item.id)}
                             />
