@@ -44,7 +44,7 @@ const Notes = ({ notes }: Props) => {
             </div>
             <List>
                 {getNoteListSortedByItemCreatedAt(notes).map(note =>
-                    <Link href={`/items/note/${note.id}`} key={note.id}>
+                    <Link href={`/items/${note.id}`} key={note.id}>
                         <Button className={classes.button}>
                             <ListItem key={note.id}>
                                 <ListItemAvatar>

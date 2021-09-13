@@ -1,10 +1,10 @@
 import { Item, Note, User } from "@prisma/client";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
-import { getFormattedDate } from "../../../functions/get_formatted_date";
-import prisma from "../../../lib/prisma";
+import { getFormattedDate } from "../../functions/get_formatted_date";
+import prisma from "../../lib/prisma";
 import Image from "next/image";
-import imageurl from "../../../public/20141126_unsplash.webp";
+import imageurl from "../../public/20141126_unsplash.webp";
 import { Avatar, Card, CardActions, CardContent, CardHeader, IconButton, ImageList, ImageListItem, List, ListItem, ListItemAvatar, ListItemText, makeStyles, Tab, Tabs } from "@material-ui/core";
 import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineSeparator } from '@material-ui/lab';
 import { useState } from "react";
@@ -12,7 +12,7 @@ import { useSession } from "next-auth/client";
 import { faEllipsisV, faHeart, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { animateScroll as Scroll } from "react-scroll";
-import { BreadCrumbs } from "../../../components/breadcrumbs";
+import { BreadCrumbs } from "../../components/breadcrumbs";
 
 const FindItemsByNoteId = ({ note, items }: Props) => {
     const [ value, setValue ] = useState<number>(0);
@@ -227,7 +227,7 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const notes: Note[] = await prisma.note.findMany();
-    const paths = notes.map(note => `/items/note/${note.id}`);
+    const paths = notes.map(note => `/items/${note.id}`);
 
     return { paths, fallback: false }
 }
