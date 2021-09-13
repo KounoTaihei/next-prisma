@@ -9,14 +9,20 @@ import { getFormattedDate } from "../../functions/get_formatted_date";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { getLatestDate } from "../../functions/get_latest_date";
-import { useEffect } from "react";
 import { getNoteListSortedByItemCreatedAt } from "../../functions/get_note_list_sorted_by_item_created_at";
+import { useState } from "react";
+import { NoteCreateModal } from './note_create.modal';
 
 const Notes = ({ notes }: Props) => {
+    const [ modalOpen, setModalOpen ] = useState<boolean>(false);
+
     const useStyles = makeStyles(() =>
         createStyles({
             button: {
                 width: "100%"
+            },
+            icon: {
+                fontSize: "1.2em"
             }
         })
     );
@@ -24,11 +30,14 @@ const Notes = ({ notes }: Props) => {
 
     return (
         <>
-            <Link href="/notes/create">
-                <IconButton>
+            <div className="text-right">
+                <IconButton
+                    onClick={() => setModalOpen(true)}
+                    className={classes.icon}
+                >
                     <FontAwesomeIcon icon={faPlus} />
                 </IconButton>
-            </Link>
+            </div>
             <List>
                 {getNoteListSortedByItemCreatedAt(notes).map(note =>
                     <Link href={`/items/note/${note.id}`} key={note.id}>
@@ -62,6 +71,10 @@ const Notes = ({ notes }: Props) => {
                     </Link>
                 )}
             </List>
+            <NoteCreateModal
+                modalOpen={modalOpen}
+                setModalOpen={setModalOpen}
+            />
         </>
     )
 }
