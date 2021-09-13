@@ -13,10 +13,13 @@ import { faEllipsisV, faHeart, faPen, faPlus, faTrash } from "@fortawesome/free-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { animateScroll as Scroll } from "react-scroll";
 import { BreadCrumbs } from "../../components/breadcrumbs";
+import { ItemCreateModal } from "../../components/items/item_create.modal";
 
 const FindItemsByNoteId = ({ note, items }: Props) => {
     const [ value, setValue ] = useState<number>(0);
     const [ session ] = useSession();
+
+    const [ itemModalOpen, setItemModalOpen ] = useState<boolean>(false);
 
     const useStyles = makeStyles({
         tabs: {
@@ -167,13 +170,17 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                         />
                     </ListItem>
                 </List>
+                {/* ノート作成者とセッションユーザーが同じなら表示 */}
                 {session?.user.id === note.userId && (
                     <div>
-                        <Link href={`/items/create/${note.id}`}>
-                            <IconButton className={classes.topIcon}>
-                                <FontAwesomeIcon icon={faPlus} />
-                            </IconButton>
-                        </Link>
+                        <IconButton className={classes.topIcon} onClick={() => setItemModalOpen(true)}>
+                            <FontAwesomeIcon icon={faPlus} />
+                        </IconButton>
+                        <ItemCreateModal
+                            note={note}
+                            modalOpen={itemModalOpen}
+                            setModalOpen={setItemModalOpen}
+                        />
                         <IconButton className={classes.topIcon}>
                             <FontAwesomeIcon icon={faPen} />
                         </IconButton>

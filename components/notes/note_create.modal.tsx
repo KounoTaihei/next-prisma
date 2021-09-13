@@ -28,6 +28,13 @@ export const NoteCreateModal = ({
             },
             progress: {
                 margin: "30px"
+            },
+            textField: {
+                width: "100%",
+                margin: "0.5em 0"
+            },
+            actions: {
+                justifyContent: "space-evenly"
             }
         })
     );
@@ -97,13 +104,14 @@ export const NoteCreateModal = ({
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.title}
+                                        className={classes.textField}
                                     />
                                     <span className="text-red-400">
                                         {errors.title && touched.title}
                                     </span>
                                 </div>
                                 <div>
-                                    <DialogActions>
+                                    <DialogActions className={classes.actions}>
                                         <Button variant="outlined" onClick={handleReset}>
                                             入力をクリア
                                         </Button>
