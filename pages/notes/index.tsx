@@ -11,7 +11,7 @@ import { faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { getLatestDate } from "../../functions/get_latest_date";
 import { getNoteListSortedByItemCreatedAt } from "../../functions/get_note_list_sorted_by_item_created_at";
 import { useState } from "react";
-import { NoteCreateModal } from './note_create.modal';
+import { NoteCreateModal } from '../../components/notes/note_create.modal';
 
 const Notes = ({ notes }: Props) => {
     const [ modalOpen, setModalOpen ] = useState<boolean>(false);

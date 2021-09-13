@@ -67,9 +67,8 @@ export const NoteCreateModal = ({
                         validationSchema = {validationSchema}
                         onSubmit = {async (values) => {
                             setSubmitting(true);
-                            await axios.post(apiUrl, values).then(() => {
-                                setSubmitting(false);
-                                setModalOpen(false);
+                            await axios.post(apiUrl, values).then((res) => {
+                                router.push(`items/note/${res.data.id}`)
                             })
                             .catch(err => {
                                 setSubmitting(false);
