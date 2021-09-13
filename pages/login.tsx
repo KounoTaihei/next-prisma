@@ -8,7 +8,7 @@ const Login = () => {
     const router = useRouter();
 
     if(loading) {
-        return <span className="text-center"><CircularProgress /></span>
+        return <CircularProgress />
     }
 
     return (

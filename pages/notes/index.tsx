@@ -2,12 +2,12 @@ import prisma from "../../lib/prisma";
 import { GetStaticProps } from "next";
 import { Item, Note, User } from "@prisma/client";
 import Link from "next/link";
-import { Avatar, Button, List, ListItem, ListItemAvatar, ListItemText } from "@material-ui/core";
+import { Avatar, Button, IconButton, List, ListItem, ListItemAvatar, ListItemText } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Image from 'next/image';
 import { getFormattedDate } from "../../functions/get_formatted_date";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { getLatestDate } from "../../functions/get_latest_date";
 import { useEffect } from "react";
 import { getNoteListSortedByItemCreatedAt } from "../../functions/get_note_list_sorted_by_item_created_at";
@@ -24,7 +24,11 @@ const Notes = ({ notes }: Props) => {
 
     return (
         <>
-            <Link href="/notes/create"><Button>add note</Button></Link>
+            <Link href="/notes/create">
+                <IconButton>
+                    <FontAwesomeIcon icon={faPlus} />
+                </IconButton>
+            </Link>
             <List>
                 {getNoteListSortedByItemCreatedAt(notes).map(note =>
                     <Link href={`/items/note/${note.id}`} key={note.id}>

@@ -5,7 +5,7 @@ import { useRouter } from "next/dist/client/router";
 import { useState } from "react";
 import * as Yup from 'yup';
 
-const apiUrl = process.env.API_URL + "/notes";
+const apiUrl = "../../api/notes";
 
 const CreateNote = () => {
     const router = useRouter();
