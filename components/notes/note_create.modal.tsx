@@ -8,7 +8,7 @@ import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import * as Yup from 'yup';
 
-const apiUrl = `${process.env.API_URL}/notes`;
+const apiUrl = "/api/notes";
 
 export const NoteCreateModal = ({
     modalOpen,
@@ -75,7 +75,7 @@ export const NoteCreateModal = ({
                         onSubmit = {async (values) => {
                             setSubmitting(true);
                             await axios.post(apiUrl, values).then((res) => {
-                                router.push(`items/note/${res.data.id}`)
+                                router.push(`items/${res.data.id}`)
                             })
                             .catch(err => {
                                 setSubmitting(false);

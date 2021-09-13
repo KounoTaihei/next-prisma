@@ -1,6 +1,5 @@
 import { Item, Note, User } from "@prisma/client";
 import { GetStaticPaths, GetStaticProps } from "next";
-import Link from "next/link";
 import { getFormattedDate } from "../../functions/get_formatted_date";
 import prisma from "../../lib/prisma";
 import Image from "next/image";
@@ -9,7 +8,7 @@ import { Avatar, Card, CardActions, CardContent, CardHeader, IconButton, ImageLi
 import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineSeparator } from '@material-ui/lab';
 import { useState } from "react";
 import { useSession } from "next-auth/client";
-import { faEllipsisV, faHeart, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { animateScroll as Scroll } from "react-scroll";
 import { BreadCrumbs } from "../../components/breadcrumbs";

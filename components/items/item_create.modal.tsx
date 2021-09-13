@@ -9,7 +9,7 @@ import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import * as Yup from 'yup';
 
-const apiUrl = `${process.env.API_URL}/items`;
+const apiUrl = "/api/items";
 
 export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
     const router = useRouter();
