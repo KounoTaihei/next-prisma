@@ -12,6 +12,7 @@ import { useSession } from "next-auth/client";
 import { faEllipsisV, faHeart, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { animateScroll as Scroll } from "react-scroll";
+import { BreadCrumbs } from "../../../components/breadcrumbs";
 
 const FindItemsByNoteId = ({ note, items }: Props) => {
     const [ value, setValue ] = useState<number>(0);
@@ -138,6 +139,15 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
 
     return (
         <>
+            <BreadCrumbs
+                links={[
+                    {
+                        path: "/notes",
+                        name: "ノート一覧"
+                    }
+                ]}
+                current={note.title}
+            />
             <div className="text-center p-4">
                 <List>
                     <ListItem>

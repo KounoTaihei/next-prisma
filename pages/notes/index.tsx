@@ -12,6 +12,7 @@ import { getLatestDate } from "../../functions/get_latest_date";
 import { getNoteListSortedByItemCreatedAt } from "../../functions/get_note_list_sorted_by_item_created_at";
 import { useState } from "react";
 import { NoteCreateModal } from '../../components/notes/note_create.modal';
+import { BreadCrumbs } from "../../components/breadcrumbs";
 
 const Notes = ({ notes }: Props) => {
     const [ modalOpen, setModalOpen ] = useState<boolean>(false);
@@ -30,6 +31,9 @@ const Notes = ({ notes }: Props) => {
 
     return (
         <>
+            <BreadCrumbs
+                current="ノート一覧"
+            />
             <div className="text-right">
                 <IconButton
                     onClick={() => setModalOpen(true)}
