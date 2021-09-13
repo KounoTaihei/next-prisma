@@ -8,7 +8,7 @@ import { useState } from "react";
 import * as Yup from 'yup';
 import prisma from '../../../lib/prisma';
 
-const apiUrl = "../../api/items";
+const apiUrl = `${process.env.API_URL}/items`;
 
 const CreateItem = ({ note }: Props) => {
     const router = useRouter();
