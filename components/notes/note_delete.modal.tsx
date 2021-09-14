@@ -6,8 +6,9 @@ import { createStyles, makeStyles } from "@material-ui/styles";
 import axios from "axios";
 import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
+import { API_URL } from "../../lib/api";
 
-const apiUrl = '/api';
+const apiUrl = API_URL;
 
 export const NoteDeleteModal = ({
     note,

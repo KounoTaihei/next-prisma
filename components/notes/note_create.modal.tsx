@@ -7,8 +7,9 @@ import { Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import * as Yup from 'yup';
+import { API_URL } from "../../lib/api";
 
-const apiUrl = '/api/notes';
+const apiUrl = `${API_URL}/notes`;
 
 export const NoteCreateModal = ({
     modalOpen,

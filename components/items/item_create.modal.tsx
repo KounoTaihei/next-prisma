@@ -1,5 +1,5 @@
 import { Note } from ".prisma/client";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, IconButton, TextField } from "@material-ui/core"
 import { createStyles, makeStyles } from "@material-ui/styles";
@@ -8,10 +8,13 @@ import { Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import * as Yup from 'yup';
+import { getFormattedDate } from "../../functions/get_formatted_date";
+import { API_URL } from "../../lib/api";
 
-const apiUrl = '/api/items';
+const apiUrl = `${API_URL}/items`;
 
 export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
+    const [ forRender, setForRender ] = useState<boolean>(false);
     const router = useRouter();
     const [ submitting, setSubmitting ] = useState<boolean>(false);
 
@@ -33,6 +36,10 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
             },
             actions: {
                 justifyContent: "space-evenly"
+            },
+            button: {
+                fontSize: "0.8em",
+                padding: "0.4em"
             }
         })
     );
@@ -103,12 +110,11 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                             handleChange,
                             handleBlur,
                             handleSubmit,
-                            isSubmitting,
-                            handleReset
+                            isSubmitting
                         }) => (
                             <form onSubmit={handleSubmit}>
                                 <div className="p-2">
-                                    <div>
+                                    <div className="text-right">
                                         <TextField
                                             label="タイトル"
                                             type="text"
@@ -120,8 +126,16 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                                             helperText={errors.title && touched.title ? "入力必須です" : ""}
                                             className={classes.textField}
                                         />
+                                        <IconButton
+                                            onClick={() => {
+                                                values.title = `${getFormattedDate(new Date())}の投稿`;
+                                                setForRender(!forRender);
+                                            }}
+                                        >
+                                            <FontAwesomeIcon icon={faEdit} />
+                                        </IconButton>
                                     </div>
-                                    <div>
+                                    <div className="text-right">
                                         <TextField
                                             id="standard-multiline-static"
                                             label="本文"
@@ -135,6 +149,14 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                                             helperText={errors.body && touched.body ? "入力必須です" : ""}
                                             className={classes.textField}
                                         />
+                                        <IconButton
+                                            onClick={() => {
+                                                values.body = "入力が面倒な時に使う";
+                                                setForRender(!forRender);
+                                            }}
+                                        >
+                                            <FontAwesomeIcon icon={faEdit} />
+                                        </IconButton>
                                     </div>
                                     <div className="text-center flex items-center">
                                         {/* <div className="w-96">
@@ -159,7 +181,13 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                                 </div>
                                 <div>
                                     <DialogActions className={classes.actions}>
-                                        <Button variant="outlined" onClick={handleReset}>
+                                        <Button variant="outlined"
+                                            onClick={() => {
+                                                values.title = "",
+                                                values.body = "",
+                                                setForRender(!forRender);
+                                            }}
+                                        >
                                             入力をクリア
                                         </Button>
                                         <Button variant="outlined" color="primary" type="submit" disabled={isSubmitting}>
