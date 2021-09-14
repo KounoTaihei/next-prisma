@@ -9,9 +9,8 @@ import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import * as Yup from 'yup';
 import { getFormattedDate } from "../../functions/get_formatted_date";
-import { API_URL } from "../../lib/api";
 
-const apiUrl = `${API_URL}/items`;
+const apiUrl = '/api/items';
 
 export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
     const [ forRender, setForRender ] = useState<boolean>(false);
