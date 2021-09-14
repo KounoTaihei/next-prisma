@@ -9,7 +9,7 @@ import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import * as Yup from 'yup';
 
-const apiUrl = "/api/items";
+const apiUrl = `${process.env.API_URL}/items`;
 
 export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
     const router = useRouter();
@@ -107,7 +107,7 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                             handleReset
                         }) => (
                             <form onSubmit={handleSubmit}>
-                                <div>
+                                <div className="p-2">
                                     <div>
                                         <TextField
                                             label="タイトル"

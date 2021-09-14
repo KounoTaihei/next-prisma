@@ -1,7 +1,8 @@
+import { Note } from ".prisma/client"
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, IconButton, makeStyles, TextField } from "@material-ui/core";
-import { createStyles } from "@material-ui/styles";
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, IconButton, TextField } from "@material-ui/core"
+import { createStyles, makeStyles } from "@material-ui/styles";
 import axios from "axios";
 import { Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
@@ -10,10 +11,11 @@ import * as Yup from 'yup';
 
 const apiUrl = `${process.env.API_URL}/notes`;
 
-export const NoteCreateModal = ({
+export const NoteUpdateModal = ({
+    note,
     modalOpen,
-    setModalOpen
-}: Props) => {
+    setModalOpen,
+}: Props ) => {
     const router = useRouter();
     const [ submitting, setSubmitting ] = useState<boolean>(false);
 
@@ -42,10 +44,10 @@ export const NoteCreateModal = ({
 
     const handleClose = () => {
         setModalOpen(false);
-    };
+    }
 
     const initialValues = {
-        title: ""
+        title: note.title
     }
 
     const validationSchema = Yup.object().shape({
@@ -64,7 +66,7 @@ export const NoteCreateModal = ({
             ) : (
                 <DialogContent>
                     <DialogContentText className={classes.dialogTitle}>
-                        新規ノートを作成
+                        ノートを更新
                         <IconButton onClick={handleClose}>
                             <FontAwesomeIcon icon={faTimes} />
                         </IconButton>
@@ -74,8 +76,8 @@ export const NoteCreateModal = ({
                         validationSchema = {validationSchema}
                         onSubmit = {async (values) => {
                             setSubmitting(true);
-                            await axios.post(apiUrl, values).then((res) => {
-                                router.push(`items/${res.data.id}`)
+                            await axios.put(`${apiUrl}/${note.id}`, values).then(() => {
+                                router.reload();
                             })
                             .catch(err => {
                                 setSubmitting(false);
@@ -130,6 +132,7 @@ export const NoteCreateModal = ({
 }
 
 interface Props {
+    note: Note
     modalOpen: boolean
     setModalOpen: Dispatch<SetStateAction<boolean>>
 }

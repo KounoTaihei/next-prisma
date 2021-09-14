@@ -13,12 +13,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { animateScroll as Scroll } from "react-scroll";
 import { BreadCrumbs } from "../../components/breadcrumbs";
 import { ItemCreateModal } from "../../components/items/item_create.modal";
+import { NoteUpdateModal } from "../../components/notes/note_update.modal";
 
 const FindItemsByNoteId = ({ note, items }: Props) => {
     const [ value, setValue ] = useState<number>(0);
     const [ session ] = useSession();
 
-    const [ itemModalOpen, setItemModalOpen ] = useState<boolean>(false);
+    const [ itemCreateModalOpen, setItemCreateModalOpen ] = useState<boolean>(false);
+    const [ noteUpdateModalOpen, setNoteUpdateModalOpen ] = useState<boolean>(false);
 
     const useStyles = makeStyles({
         tabs: {
@@ -45,7 +47,8 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
             flexWrap: 'nowrap',
         },
         topIcon: {
-            fontSize: "1em"
+            fontSize: "1.2em",
+            margin: "0 5px"
         },
         icon: {
             fontSize: "1.2em"
@@ -173,17 +176,22 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                 {/* ノート作成者とセッションユーザーが同じなら表示 */}
                 {session?.user.id === note.userId && (
                     <div>
-                        <IconButton className={classes.topIcon} onClick={() => setItemModalOpen(true)}>
+                        <IconButton className={classes.topIcon} onClick={() => setItemCreateModalOpen(true)}>
                             <FontAwesomeIcon icon={faPlus} />
                         </IconButton>
                         <ItemCreateModal
                             note={note}
-                            modalOpen={itemModalOpen}
-                            setModalOpen={setItemModalOpen}
+                            modalOpen={itemCreateModalOpen}
+                            setModalOpen={setItemCreateModalOpen}
                         />
-                        <IconButton className={classes.topIcon}>
+                        <IconButton className={classes.topIcon} onClick={() => setNoteUpdateModalOpen(true)}>
                             <FontAwesomeIcon icon={faPen} />
                         </IconButton>
+                        <NoteUpdateModal
+                            note={note}
+                            modalOpen={noteUpdateModalOpen}
+                            setModalOpen={setNoteUpdateModalOpen}
+                        />
                         <IconButton className={classes.topIcon}>
                             <FontAwesomeIcon icon={faTrash} />
                         </IconButton>
