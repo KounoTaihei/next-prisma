@@ -14,6 +14,7 @@ import { animateScroll as Scroll } from "react-scroll";
 import { BreadCrumbs } from "../../components/breadcrumbs";
 import { ItemCreateModal } from "../../components/items/item_create.modal";
 import { NoteUpdateModal } from "../../components/notes/note_update.modal";
+import { NoteDeleteModal } from "../../components/notes/note_delete.modal";
 
 const FindItemsByNoteId = ({ note, items }: Props) => {
     const [ value, setValue ] = useState<number>(0);
@@ -21,6 +22,7 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
 
     const [ itemCreateModalOpen, setItemCreateModalOpen ] = useState<boolean>(false);
     const [ noteUpdateModalOpen, setNoteUpdateModalOpen ] = useState<boolean>(false);
+    const [ noteDeleteModalOpen, setNoteDeleteModalOpen ] = useState<boolean>(false);
 
     const useStyles = makeStyles({
         tabs: {
@@ -192,9 +194,15 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                             modalOpen={noteUpdateModalOpen}
                             setModalOpen={setNoteUpdateModalOpen}
                         />
-                        <IconButton className={classes.topIcon}>
+                        <IconButton className={classes.topIcon} onClick={() => setNoteDeleteModalOpen(true)}>
                             <FontAwesomeIcon icon={faTrash} />
                         </IconButton>
+                        <NoteDeleteModal
+                            note={note}
+                            itemsLength={items.length}
+                            modalOpen={noteDeleteModalOpen}
+                            setModalOpen={setNoteDeleteModalOpen}
+                        />
                     </div>
                 )}
             </div>
