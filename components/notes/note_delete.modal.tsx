@@ -7,7 +7,7 @@ import axios from "axios";
 import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
 
-const apiUrl = `${process.env.API_URL}/notes`;
+const apiUrl = process.env.API_URL;
 
 export const NoteDeleteModal = ({
     note,
@@ -52,8 +52,22 @@ export const NoteDeleteModal = ({
 
     const deleteNote = async () => {
         setSubmitting(true);
-        await axios.delete(`${apiUrl}/${note.id}`).then(() => {
+        await axios.delete(`${apiUrl}/notes/${note.id}`).then(() => {
             router.push('/notes');
+        })
+        .catch(err => {
+            setSubmitting(false);
+            console.log(err);
+        });
+    }
+
+    const deleteAllItems = async () => {
+        if(!confirm('本当に削除しますか？')) {
+            return;
+        }
+        setSubmitting(true);
+        await axios.delete(`${apiUrl}/items/all/${note.id}`).then(() => {
+            router.reload();
         })
         .catch(err => {
             setSubmitting(false);
@@ -73,7 +87,7 @@ export const NoteDeleteModal = ({
             ) : (
                 <DialogContent>
                     <DialogContentText className={classes.dialogTitle}>
-                        {note.title}を削除
+                        ノートを削除（{note.title}）
                         <IconButton onClick={handleClose}>
                             <FontAwesomeIcon icon={faTimes} />
                         </IconButton>
@@ -81,17 +95,22 @@ export const NoteDeleteModal = ({
                     {itemsLength > 0 && (
                         <DialogContentText className={classes.alertMessage}>
                             <FontAwesomeIcon icon={faExclamationCircle} className={classes.icon} />
-                            追加されているアイテムも同時に削除されます。<br></br>
-                            本当に削除しますか？
+                            アイテムが追加されている為削除できません。
                         </DialogContentText>
                     )}
                     <DialogActions className={classes.actions}>
                         <Button variant="outlined" onClick={() => setModalOpen(false)}>
-                            キャンセル
+                            戻る
                         </Button>
-                        <Button variant="outlined" color="secondary" type="submit" disabled={submitting} onClick={deleteNote}>
-                            削除
-                        </Button>
+                        {itemsLength > 0 ? (
+                            <Button variant="outlined" color="secondary" type="submit" disabled={submitting} onClick={deleteAllItems}>
+                                アイテムを全て削除
+                            </Button>
+                        ) : (
+                            <Button variant="outlined" color="secondary" type="submit" disabled={submitting} onClick={deleteNote}>
+                                削除
+                            </Button>
+                        )}
                     </DialogActions>
                 </DialogContent>
             )}

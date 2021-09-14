@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             const note: Note = await prisma.note.delete({
                 where: { id }
             });
-            res.json(note);
+            res.status(200).json(note);
             break;
         }
         default: {
