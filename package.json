@@ -37,6 +37,7 @@
     "postcss": "^8.3.6",
     "prisma": "^2.30.2",
     "react-scroll": "^1.8.4",
+    "swr": "^1.0.1",
     "tailwindcss": "^2.2.8",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.2"

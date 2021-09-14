@@ -15,6 +15,7 @@ import { BreadCrumbs } from "../../components/breadcrumbs";
 import { ItemCreateModal } from "../../components/items/item_create.modal";
 import { NoteUpdateModal } from "../../components/notes/note_update.modal";
 import { NoteDeleteModal } from "../../components/notes/note_delete.modal";
+import { NoteWithUser } from "../../types/note";
 
 const FindItemsByNoteId = ({ note, items }: Props) => {
     const [ value, setValue ] = useState<number>(0);
@@ -102,11 +103,9 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                     </CardContent>
                     <div className="flex justify-between">
                         <CardActions>
-                            {session?.user.id !== note.userId && (
-                                <IconButton className={classes.icon}>
-                                    <FontAwesomeIcon icon={faHeart} />
-                                </IconButton>
-                            )}
+                            <IconButton className={classes.icon}>
+                                <FontAwesomeIcon icon={faHeart} />
+                            </IconButton>
                         </CardActions>
                         <CardActions>
                             {session?.user.id === note.userId && (
@@ -284,10 +283,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             items
         }
     }
-}
-
-interface NoteWithUser extends Note {
-    user: User
 }
 
 interface Props {

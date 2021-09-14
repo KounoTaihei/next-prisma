@@ -81,7 +81,7 @@ const Header = () => {
                             </>
                         ) : (
                             <>
-                                <Link href="/profile">
+                                <Link href={`/profile/${session.user.id}`}>
                                     <Avatar className={classes.avatar}>
                                         <Image alt="ログインユーザーの画像" src={session.user.image} layout="fill" loading="lazy" />
                                     </Avatar>

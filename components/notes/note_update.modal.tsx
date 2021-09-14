@@ -9,7 +9,7 @@ import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import * as Yup from 'yup';
 
-const apiUrl = `${process.env.API_URL}/notes`;
+const apiUrl = '/api/notes';
 
 export const NoteUpdateModal = ({
     note,

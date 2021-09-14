@@ -7,7 +7,7 @@ import axios from "axios";
 import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
 
-const apiUrl = process.env.API_URL;
+const apiUrl = '/api';
 
 export const NoteDeleteModal = ({
     note,
