@@ -1,5 +1,5 @@
 import { AppBar, Avatar, Button, Drawer, IconButton, List, ListItem, Toolbar } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { useSession } from 'next-auth/client';
 import Link from 'next/link';
 import Image from 'next/image';

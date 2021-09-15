@@ -3,7 +3,6 @@ import { faExclamationCircle, faTimes } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, IconButton } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/styles";
-import axios from "axios";
 import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
 
@@ -68,7 +67,9 @@ export const NoteDeleteModal = ({
             return;
         }
         setSubmitting(true);
-        await axios.delete(`${apiUrl}/items/all/${note.id}`).then(() => {
+        await fetch(`${apiUrl}/items/all/${note.id}`, {
+            method: 'DELETE'
+        }).then(() => {
             router.reload();
         })
         .catch(err => {
