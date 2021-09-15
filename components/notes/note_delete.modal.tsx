@@ -52,7 +52,9 @@ export const NoteDeleteModal = ({
 
     const deleteNote = async () => {
         setSubmitting(true);
-        await axios.delete(`${apiUrl}/notes/${note.id}`).then(() => {
+        await fetch(`${apiUrl}/notes/${note.id}`, {
+            method: 'DELETE'
+        }).then(() => {
             router.push('/notes');
         })
         .catch(err => {

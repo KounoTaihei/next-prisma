@@ -2,7 +2,6 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, IconButton, makeStyles, TextField } from "@material-ui/core";
 import { createStyles } from "@material-ui/styles";
-import axios from "axios";
 import { Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -74,8 +73,16 @@ export const NoteCreateModal = ({
                         validationSchema = {validationSchema}
                         onSubmit = {async (values) => {
                             setSubmitting(true);
-                            await axios.post(apiUrl, values).then((res) => {
-                                router.push(`items/${res.data.id}`)
+                            await fetch(apiUrl, {
+                                method: "POST",
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(values)
+                            }).then((res) => {
+                                res.json().then(r => {
+                                    router.push(`items/${r.id}`)
+                                })
                             })
                             .catch(err => {
                                 setSubmitting(false);
