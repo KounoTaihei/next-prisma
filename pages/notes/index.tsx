@@ -44,12 +44,12 @@ const Notes = ({ notes }: Props) => {
             </div>
             <List>
                 {getNoteListSortedByItemCreatedAt(notes).map(note =>
-                    <Link href={`/items/${note.id}`} key={note.id}>
+                    <Link href={`/items/${note.id}`} key={note.id} passHref>
                         <Button className={classes.button}>
                             <ListItem key={note.id}>
                                 <ListItemAvatar>
                                     <Avatar>
-                                        <Image src={note.user.image!} layout="fill" loading="lazy" />
+                                        <Image src={note.user.image!} layout="fill" loading="lazy" alt="作成者の画像" />
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText

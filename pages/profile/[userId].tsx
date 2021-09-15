@@ -1,5 +1,5 @@
 import { User } from ".prisma/client";
-import { Avatar, Button, Divider, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
+import { Avatar, Button, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { signOut, useSession } from "next-auth/client";
 import { useRouter } from "next/dist/client/router";
@@ -34,7 +34,7 @@ const Profile = ({ user }: Props) => {
                 <div className="flex flex-col justify-center items-center text-center p-2">
                     <ListItemAvatar>
                         <Avatar>
-                            <Image src={user.image!} loading="lazy" layout="fill" />
+                            <Image src={user.image!} loading="lazy" layout="fill" alt="ログインユーザーの画像" />
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText
@@ -61,7 +61,7 @@ const Profile = ({ user }: Props) => {
             <List>
                 <div className="text-center font-bold border-b-2 w-3/4 mx-auto">ノート一覧</div>
                 {user.notes.map(note =>
-                    <Link key={note.id} href={`/items/${note.id}`}>
+                    <Link key={note.id} href={`/items/${note.id}`} passHref>
                         <Button className={classes.button}>
                             <ListItem className={classes.listItem}>
                                 <ListItemText

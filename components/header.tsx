@@ -41,7 +41,7 @@ const Header = () => {
 
     const menuContents = (
         <List className={classes.menu}>
-            <Link href="/notes">
+            <Link href="/notes" passHref>
                 <ListItem
                     button
                     className={classes.menuItem}
@@ -73,7 +73,7 @@ const Header = () => {
                     <nav>
                         {!session ? (
                             <>
-                                <Link href="/login">
+                                <Link href="/login" passHref>
                                     <Avatar className={classes.avatar}>
                                         <Image alt="未ログインユーザーの画像" src={humanImage} layout="fill" loading="lazy" />
                                     </Avatar>
@@ -81,7 +81,7 @@ const Header = () => {
                             </>
                         ) : (
                             <>
-                                <Link href={`/profile/${session.user.id}`}>
+                                <Link href={`/profile/${session.user.id}`} passHref>
                                     <Avatar className={classes.avatar}>
                                         <Image alt="ログインユーザーの画像" src={session.user.image} layout="fill" loading="lazy" />
                                     </Avatar>

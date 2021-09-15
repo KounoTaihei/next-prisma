@@ -1,4 +1,4 @@
-import { Item, Note, User } from "@prisma/client";
+import { Item, Note } from "@prisma/client";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { getFormattedDate } from "../../functions/get_formatted_date";
 import prisma from "../../lib/prisma";
@@ -93,7 +93,7 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                         <ImageList className={classes.imageList} cols={1.1}>
                             {paths.map((path, i) =>
                                 <ImageListItem key={i}>
-                                    <Image src={imageurl} />
+                                    <Image src={imageurl} alt="ダミー画像" />
                                 </ImageListItem>
                             )}
                         </ImageList>
@@ -160,7 +160,7 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
-                                <Image src={note.user.image!} layout="fill" loading="lazy" />
+                                <Image src={note.user.image!} layout="fill" loading="lazy" alt="ログインユーザーの画像" />
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText
@@ -241,7 +241,7 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
                     </Timeline>
                 </>
                 :
-                <p>アイテムはありません</p>
+                <p className="text-center">アイテムはありません</p>
             }
         </>
     )
