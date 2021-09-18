@@ -97,8 +97,9 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                                 },
                                 body: JSON.stringify(values)
                             })
-                            .then(() => {
+                            .then((res) => {
                                 setModalOpen(false);
+                                console.log(res.json())
                                 // router.reload();
                             })
                             .catch(err => {
