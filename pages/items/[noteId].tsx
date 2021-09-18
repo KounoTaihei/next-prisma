@@ -6,7 +6,7 @@ import Image from "next/image";
 import imageurl from "../../public/20141126_unsplash.webp";
 import { Avatar, Card, CardActions, CardContent, CardHeader, IconButton, ImageList, ImageListItem, List, ListItem, ListItemAvatar, ListItemText, makeStyles, Tab, Tabs } from "@material-ui/core";
 import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineSeparator } from '@material-ui/lab';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/client";
 import { faHeart, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,14 +16,33 @@ import { ItemCreateModal } from "../../components/items/item_create.modal";
 import { NoteUpdateModal } from "../../components/notes/note_update.modal";
 import { NoteDeleteModal } from "../../components/notes/note_delete.modal";
 import { NoteWithUser } from "../../types/note";
+import { revalidateTime } from "../../lib/revalidate_time";
 
-const FindItemsByNoteId = ({ note, items }: Props) => {
+const FindItemsByNoteId = (props: Props) => {
+    const [ note, setNote ] = useState<NoteWithUser>(props.note);
+    const [ items, setItems ] = useState<Item[]>(props.items);
     const [ value, setValue ] = useState<number>(0);
     const [ session ] = useSession();
 
     const [ itemCreateModalOpen, setItemCreateModalOpen ] = useState<boolean>(false);
     const [ noteUpdateModalOpen, setNoteUpdateModalOpen ] = useState<boolean>(false);
     const [ noteDeleteModalOpen, setNoteDeleteModalOpen ] = useState<boolean>(false);
+
+    /** ノートの作成者がログインユーザーならデータを再取得 */
+    const isMine = session && session.user.id === note.userId ? true : false;
+    useEffect(() => {
+        if(!isMine) return;
+        (async function () {
+            try {
+                const data: Item[] | null = await fetch(`/api/items/${note.id}`).then(res => res.json());
+                if(data) {
+                    setItems(data);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        })();
+    },[isMine])
 
     const useStyles = makeStyles({
         tabs: {
@@ -60,7 +79,6 @@ const FindItemsByNoteId = ({ note, items }: Props) => {
             width: "fit-content"
         }
     });
-
     const classes = useStyles();
 
     /** タブの切り替え */
@@ -251,7 +269,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     const notes: Note[] = await prisma.note.findMany();
     const paths = notes.map(note => `/items/${note.id}`);
 
-    return { paths, fallback: false }
+    return { paths, fallback: "blocking" }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -281,7 +299,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         props: {
             note,
             items
-        }
+        },
+        revalidate: revalidateTime
     }
 }
 

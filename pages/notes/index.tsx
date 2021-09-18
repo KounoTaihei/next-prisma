@@ -1,6 +1,5 @@
 import prisma from "../../lib/prisma";
 import { GetStaticProps } from "next";
-import { Item, Note, User } from "@prisma/client";
 import Link from "next/link";
 import { Avatar, Button, IconButton, List, ListItem, ListItemAvatar, ListItemText } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
@@ -13,8 +12,11 @@ import { getNoteListSortedByItemCreatedAt } from "../../functions/get_note_list_
 import { useState } from "react";
 import { NoteCreateModal } from '../../components/notes/note_create.modal';
 import { BreadCrumbs } from "../../components/breadcrumbs";
+import { revalidateTime } from "../../lib/revalidate_time";
+import { NoteWithUserAndItems } from "../../types/note";
 
-const Notes = ({ notes }: Props) => {
+const Notes = (props: Props) => {
+    const [ notes, setNotes ] = useState<NoteWithUserAndItems[]>(getNoteListSortedByItemCreatedAt(props.notes));
     const [ modalOpen, setModalOpen ] = useState<boolean>(false);
 
     const useStyles = makeStyles(() =>
@@ -43,7 +45,7 @@ const Notes = ({ notes }: Props) => {
                 </IconButton>
             </div>
             <List>
-                {getNoteListSortedByItemCreatedAt(notes).map(note =>
+                {notes.map(note =>
                     <Link href={`/items/${note.id}`} key={note.id} passHref>
                         <Button className={classes.button}>
                             <ListItem key={note.id}>
@@ -98,13 +100,9 @@ export const getStaticProps: GetStaticProps = async () => {
     return {
         props: {
             notes
-        }
+        },
+        revalidate: revalidateTime
     }
-}
-
-export interface NoteWithUserAndItems extends Note {
-    user: User
-    items: Item[]
 }
 
 interface Props {

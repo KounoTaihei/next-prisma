@@ -1,7 +1,8 @@
-import { NoteWithUserAndItems } from "../pages/notes";
+
+import { NoteWithItems, NoteWithUserAndItems } from "../types/note";
 import { getLatestDate } from "./get_latest_date";
 
-export const getNoteListSortedByItemCreatedAt = (notes: NoteWithUserAndItems[]): NoteWithUserAndItems[] => {
+export const getNoteListSortedByItemCreatedAt = (notes: NoteWithUserAndItems[] | NoteWithItems[]): any[] => {
     return notes.sort(function(a, b) {
         if(!b.items.length) {
             return -1

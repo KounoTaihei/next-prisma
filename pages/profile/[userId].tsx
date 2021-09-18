@@ -2,7 +2,6 @@ import { User } from ".prisma/client";
 import { Avatar, Button, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { signOut, useSession } from "next-auth/client";
-import { useRouter } from "next/dist/client/router";
 import { UserWithNotesWithItems } from "../../types/user";
 import prisma from "../../lib/prisma";
 import Image from 'next/image';
@@ -10,10 +9,15 @@ import Link from 'next/link';
 import { getFormattedDate } from "../../functions/get_formatted_date";
 import { getLatestDate } from "../../functions/get_latest_date";
 import { createStyles, makeStyles } from "@material-ui/styles";
+import { revalidateTime } from "../../lib/revalidate_time";
+import { useState } from "react";
+import { NoteWithItems } from "../../types/note";
+import { getNoteListSortedByItemCreatedAt } from "../../functions/get_note_list_sorted_by_item_created_at";
 
-const Profile = ({ user }: Props) => {
+const Profile = (props: Props) => {
+    const [ user, setUser ] = useState<User>(props.user);
+    const [ notes, setNotes ] = useState<NoteWithItems[]>(getNoteListSortedByItemCreatedAt(props.notes));
     const [ session ] = useSession();
-    const router = useRouter();
 
     const useStyles = makeStyles(() =>
         createStyles({
@@ -44,9 +48,9 @@ const Profile = ({ user }: Props) => {
                                 <table>
                                     <tbody>
                                         <tr><th className="px-2">登録日</th><td className="px-2">{getFormattedDate(user.createdAt)}</td></tr>
-                                        <tr><th className="px-2">ノート数</th><td className="px-2">{user.notes.length}</td></tr>
-                                        <tr><th className="px-2">最後の投稿</th><td className="px-2">{getFormattedDate(getLatestDate(
-                                            user.notes.map(note => note.createdAt)
+                                        <tr><th className="px-2">ノート数</th><td className="px-2">{notes.length}</td></tr>
+                                        <tr><th className="px-2">最新の投稿</th><td className="px-2">{getFormattedDate(getLatestDate(
+                                            notes.map(note => note.createdAt)
                                         ))}</td></tr>
                                     </tbody>
                                 </table>
@@ -60,7 +64,7 @@ const Profile = ({ user }: Props) => {
             </List>
             <List>
                 <div className="text-center font-bold border-b-2 w-3/4 mx-auto">ノート一覧</div>
-                {user.notes.map(note =>
+                {notes.map(note =>
                     <Link key={note.id} href={`/items/${note.id}`} passHref>
                         <Button className={classes.button}>
                             <ListItem className={classes.listItem}>
@@ -70,14 +74,14 @@ const Profile = ({ user }: Props) => {
                                         <>
                                             <table className="mx-auto">
                                                 <tbody>
-                                                    <tr><th className="px-2">作成日</th><td className="px-2">{getFormattedDate(note.createdAt)}</td></tr>
                                                     <tr>
-                                                        <th className="px-2">最後の投稿</th>
+                                                        <th className="px-2">最新の投稿</th>
                                                         <td className="px-2">{note.items.length ? getFormattedDate(
                                                                 getLatestDate(note.items.map(item => item.createdAt))
                                                             ) : "アイテムなし"}
                                                         </td>
                                                     </tr>
+                                                    <tr><th className="px-2">作成日</th><td className="px-2">{getFormattedDate(note.createdAt)}</td></tr>
                                                 </tbody>
                                             </table>
                                         </>
@@ -96,7 +100,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     const users: User[] = await prisma.user.findMany();
     const paths = users.map(user => `/profile/${user.id}`);
 
-    return { paths, fallback: false }
+    return { paths, fallback: "blocking" }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -104,27 +108,29 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const user: User | null = await prisma.user.findUnique({
         where: {
             id
+        }
+    })
+    .then(res => JSON.parse(JSON.stringify(res)));
+
+    const notes: NoteWithItems | null = await prisma.note.findMany({
+        where: {
+            userId: id
         },
         include: {
-            notes: {
-                orderBy: {
-                    createdAt: "desc"
-                },
-                include: {
-                    items: true
-                }
-            }
+            items: true
         }
     })
     .then(res => JSON.parse(JSON.stringify(res)));
 
     return {
-        props: { user }
+        props: { user, notes },
+        revalidate: revalidateTime
     }
 }
 
 export default Profile;
 
 interface Props {
-    user: UserWithNotesWithItems
+    user: User
+    notes: NoteWithItems[]
 }
