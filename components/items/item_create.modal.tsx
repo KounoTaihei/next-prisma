@@ -9,7 +9,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import * as Yup from 'yup';
 import { getFormattedDate } from "../../functions/get_formatted_date";
 
-const apiUrl = 'http://localhost:3000/api/items';
+const apiUrl = '/api/items';
 
 export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
     const [ forRender, setForRender ] = useState<boolean>(false);
