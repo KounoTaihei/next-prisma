@@ -1,8 +1,7 @@
 import { User } from ".prisma/client";
-import { Avatar, Button, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
+import { Avatar, Button, List, ListItem, ListItemText, Typography } from "@material-ui/core";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { signOut, useSession } from "next-auth/client";
-import { UserWithNotesWithItems } from "../../types/user";
 import prisma from "../../lib/prisma";
 import Image from 'next/image';
 import Link from 'next/link';
@@ -21,6 +20,9 @@ const Profile = (props: Props) => {
 
     const useStyles = makeStyles(() =>
         createStyles({
+            avater: {
+                margin: "5px"
+            },
             listItem: {
                 textAlign: "center",
                 margin: "0 auto"
@@ -36,11 +38,9 @@ const Profile = (props: Props) => {
         <>
             <List>
                 <div className="flex flex-col justify-center items-center text-center p-2">
-                    <ListItemAvatar>
-                        <Avatar>
-                            <Image src={user.image!} loading="lazy" layout="fill" alt="ログインユーザーの画像" />
-                        </Avatar>
-                    </ListItemAvatar>
+                    <Avatar className={classes.avater}>
+                        <Image src={user.image!} loading="lazy" layout="fill" alt="ログインユーザーの画像" />
+                    </Avatar>
                     <ListItemText
                         primary={user.name}
                         secondary={
