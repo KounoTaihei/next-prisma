@@ -45,13 +45,31 @@ export const NoteUpdateModal = ({
         setModalOpen(false);
     }
 
-    const initialValues = {
+    const initialValues: FormValues = {
         title: note.title
     }
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().max(50, '50文字以内で入力してください').required('入力必須です')
     });
+
+    const submit = async (values: FormValues) => {
+        setSubmitting(true);
+        await fetch(`${apiUrl}/${note.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+        }).then(() => {
+            setSubmitting(false);
+            setModalOpen(false);
+        })
+        .catch(err => {
+            setSubmitting(false);
+            console.log(err);
+        });
+    }
 
     return (
         <Dialog
@@ -73,22 +91,7 @@ export const NoteUpdateModal = ({
                     <Formik
                         initialValues = {initialValues}
                         validationSchema = {validationSchema}
-                        onSubmit = {async (values) => {
-                            setSubmitting(true);
-                            await fetch(`${apiUrl}/${note.id}`, {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(values)
-                            }).then(() => {
-                                router.reload();
-                            })
-                            .catch(err => {
-                                setSubmitting(false);
-                                console.log(err);
-                            });
-                        }}
+                        onSubmit = {submit}
                     >
                         {({
                             values,
@@ -134,6 +137,10 @@ export const NoteUpdateModal = ({
             )}
         </Dialog>
     )
+}
+
+interface FormValues {
+    title: string
 }
 
 interface Props {

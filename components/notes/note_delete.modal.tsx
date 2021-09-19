@@ -54,6 +54,7 @@ export const NoteDeleteModal = ({
         await fetch(`${apiUrl}/notes/${note.id}`, {
             method: 'DELETE'
         }).then(() => {
+            setSubmitting(false);
             router.push('/notes');
         })
         .catch(err => {

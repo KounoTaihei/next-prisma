@@ -43,13 +43,33 @@ export const NoteCreateModal = ({
         setModalOpen(false);
     };
 
-    const initialValues = {
+    const initialValues: FormValues = {
         title: ""
     }
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().max(50, '50文字以内で入力してください').required('入力必須です')
     });
+
+    const submit = async (values: FormValues) => {
+        setSubmitting(true);
+        await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+        }).then((res) => {
+            setSubmitting(false);
+            res.json().then(r => {
+                router.push(`items/${r.id}`)
+            })
+        })
+        .catch(err => {
+            setSubmitting(false);
+            console.log(err);
+        });
+    }
 
     return (
         <Dialog
@@ -71,24 +91,7 @@ export const NoteCreateModal = ({
                     <Formik
                         initialValues = {initialValues}
                         validationSchema = {validationSchema}
-                        onSubmit = {async (values) => {
-                            setSubmitting(true);
-                            await fetch(apiUrl, {
-                                method: "POST",
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(values)
-                            }).then((res) => {
-                                res.json().then(r => {
-                                    router.push(`items/${r.id}`)
-                                })
-                            })
-                            .catch(err => {
-                                setSubmitting(false);
-                                console.log(err);
-                            });
-                        }}
+                        onSubmit = {submit}
                     >
                         {({
                             values,
@@ -134,6 +137,10 @@ export const NoteCreateModal = ({
             )}
         </Dialog>
     )
+}
+
+interface FormValues {
+    title: string
 }
 
 interface Props {

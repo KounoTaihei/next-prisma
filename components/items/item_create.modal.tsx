@@ -5,7 +5,7 @@ import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogC
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import * as Yup from 'yup';
 import { getFormattedDate } from "../../functions/get_formatted_date";
 
@@ -43,14 +43,7 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
     );
     const classes = useStyles();
 
-    const initialValues: {
-        title : string
-        body : string
-        image_1: string | null
-        image_2: string | null
-        image_3: string | null
-        image_4: string | null
-    } = {
+    const initialValues: FormValues= {
         title: "",
         body: "",
         image_1: null,
@@ -66,6 +59,25 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
 
     const handleClose = () => {
         setModalOpen(false);
+    }
+
+    const submit = async (values: FormValues) => {
+        setSubmitting(true);
+        await fetch(`${apiUrl}/${note.id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+        })
+        .then((res) => {
+            setSubmitting(false);
+            setModalOpen(false);
+        })
+        .catch(err => {
+            setSubmitting(false);
+            console.log(err);
+        });
     }
 
     return (
@@ -88,24 +100,7 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                     <Formik
                         initialValues = {initialValues}
                         validationSchema = {validationSchema}
-                        onSubmit = {async (values) => {
-                            setSubmitting(true);
-                            await fetch(`${apiUrl}/${note.id}`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(values)
-                            })
-                            .then((res) => {
-                                setModalOpen(false);
-                                router.reload();
-                            })
-                            .catch(err => {
-                                setSubmitting(false);
-                                console.log(err);
-                            });
-                        }}
+                        onSubmit = {submit}
                     >
                         {({
                             values,
@@ -206,6 +201,15 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
             )}
         </Dialog>
     )
+}
+
+interface FormValues {
+    title : string
+    body : string
+    image_1: string | null
+    image_2: string | null
+    image_3: string | null
+    image_4: string | null
 }
 
 interface Props {

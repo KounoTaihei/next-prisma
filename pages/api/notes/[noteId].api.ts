@@ -4,15 +4,29 @@ import prisma from '../../../lib/prisma';
 import { Prisma } from '.prisma/client';
 import { NoteWithUser } from '../../../types/note';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Note | null>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Note | NoteWithUser | null>) {
     const method = req.method;
     switch (method) {
+        case 'GET': {
+            const noteId: string = req.query.noteId.toString();
+            const note: NoteWithUser | null = await prisma.note.findUnique({
+                where: {
+                    id: noteId
+                },
+                include: {
+                    user: true
+                }
+            })
+            .then(res => JSON.parse(JSON.stringify(res)));
+            res.status(200).json(note);
+            break;
+        }
         case 'PUT': {
-            const id: string = req.query.noteId.toString();
+            const noteId: string = req.query.noteId.toString();
             const data: Prisma.NoteUpdateInput = req.body;
             const note: Note = await prisma.note.update({
                 where: {
-                    id
+                    id: noteId
                 },
                 data: {
                     title: data.title
@@ -22,9 +36,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             break;
         }
         case 'DELETE': {
-            const id: string = req.query.noteId.toString();
+            const noteId: string = req.query.noteId.toString();
             const note: Note = await prisma.note.delete({
-                where: { id }
+                where: { 
+                    id: noteId
+                }
             });
             res.status(200).json(note);
             break;

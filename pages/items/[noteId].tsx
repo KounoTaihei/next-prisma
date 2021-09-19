@@ -28,21 +28,43 @@ const FindItemsByNoteId = (props: Props) => {
     const [ noteUpdateModalOpen, setNoteUpdateModalOpen ] = useState<boolean>(false);
     const [ noteDeleteModalOpen, setNoteDeleteModalOpen ] = useState<boolean>(false);
 
-    /** ノートの作成者がログインユーザーならデータを再取得 */
-    const isMine = session && session.user.id === note.userId ? true : false;
-    useEffect(() => {
-        if(!isMine) return;
-        (async function () {
-            try {
-                const data: Item[] | null = await fetch(`/api/items/${note.id}`).then(res => res.json());
-                if(data) {
-                    setItems(data);
-                }
-            } catch (err) {
-                console.log(err);
+    /** ノートを再取得 */
+    const getNote = async () => {
+        try {
+            const data: NoteWithUser | null = await fetch(`/api/notes/${note.id}`).then(res => res.json());
+            if(data) {
+                setNote(data);
             }
-        })();
-    },[isMine])
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    /** アイテム一覧を再取得 */
+    const getItems = async () => {
+        try {
+            const data: Item[] | null = await fetch(`/api/items/${note.id}`).then(res => res.json());
+            if(data) {
+                setItems(data);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    /** ノートの作成者がログインユーザーならデータを再取得 */
+    useEffect(() => {
+        if((session && session.user.id === note.user.id) && !itemCreateModalOpen) {
+            getItems();
+        }
+    },[itemCreateModalOpen])
+
+    useEffect(() => {
+        if((session && session.user.id === note.user.id) && !noteUpdateModalOpen) {
+            getNote();
+        }
+    },[noteUpdateModalOpen])
+    /** --- */
 
     const useStyles = makeStyles({
         tabs: {
