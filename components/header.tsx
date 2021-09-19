@@ -15,7 +15,7 @@ const Header = () => {
         createStyles({
             appBar: {
                 color: "#fff",
-                backgroundColor: "#3B82F6"
+                backgroundColor: "#34D399"
             },
             toolBar: {
                 display: "flex",
@@ -26,7 +26,9 @@ const Header = () => {
                 backgroundColor: "#fff"
             },
             menu: {
-                width: "70vw"
+                width: "70vw",
+                backgroundColor: "#ECFDF5",
+                height: "100%"
             },
             menuItem: {
                 padding: "10px",

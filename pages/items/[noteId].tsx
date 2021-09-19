@@ -4,8 +4,8 @@ import { getFormattedDate } from "../../functions/get_formatted_date";
 import prisma from "../../lib/prisma";
 import Image from "next/image";
 import imageurl from "../../public/20141126_unsplash.webp";
-import { Avatar, Card, CardActions, CardContent, CardHeader, IconButton, ImageList, ImageListItem, List, ListItem, ListItemAvatar, ListItemText, makeStyles, Tab, Tabs } from "@material-ui/core";
-import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineSeparator } from '@material-ui/lab';
+import { Avatar, CardActions, CardContent, CardHeader, IconButton, ImageList, ImageListItem, List, ListItem, ListItemAvatar, ListItemText, makeStyles, Tab, Tabs } from "@material-ui/core";
+import { Timeline, TimelineContent, TimelineItem } from '@material-ui/lab';
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/client";
 import { faHeart, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -98,7 +98,8 @@ const FindItemsByNoteId = (props: Props) => {
             fontSize: "1.2em"
         },
         titleText: {
-            width: "fit-content"
+            width: "fit-content",
+
         }
     });
     const classes = useStyles();
@@ -120,47 +121,47 @@ const FindItemsByNoteId = (props: Props) => {
     const timelineContent = ( item: Item ) => {
         return (
             <>
-                <Card>
-                    <CardHeader
-                        subheader={
-                            <>
+                <CardHeader
+                    subheader={
+                        <>
+                            <div className="text-center ::after, border-b-2 border-green-100">
                                 <span className="text-black">{item.title}</span><br></br>
                                 {getFormattedDate(item.createdAt)}
+                            </div>
+                        </>
+                    }
+                />
+                <div className={classes.imageListWrapper}>
+                    <ImageList className={classes.imageList} cols={1.1}>
+                        {paths.map((path, i) =>
+                            <ImageListItem key={i}>
+                                <Image src={imageurl} alt="ダミー画像" />
+                            </ImageListItem>
+                        )}
+                    </ImageList>
+                </div>
+                <CardContent className={classes.cardContent}>
+                    {item.body}
+                </CardContent>
+                <div className="flex justify-between">
+                    <CardActions>
+                        <IconButton className={classes.icon}>
+                            <FontAwesomeIcon icon={faHeart} />
+                        </IconButton>
+                    </CardActions>
+                    <CardActions>
+                        {session?.user.id === note.userId && (
+                            <>
+                                <IconButton className={classes.icon}>
+                                    <FontAwesomeIcon icon={faPen} />
+                                </IconButton>
+                                <IconButton className={classes.icon}>
+                                    <FontAwesomeIcon icon={faTrash} />
+                                </IconButton>
                             </>
-                        }
-                    />
-                    <div className={classes.imageListWrapper}>
-                        <ImageList className={classes.imageList} cols={1.1}>
-                            {paths.map((path, i) =>
-                                <ImageListItem key={i}>
-                                    <Image src={imageurl} alt="ダミー画像" />
-                                </ImageListItem>
-                            )}
-                        </ImageList>
-                    </div>
-                    <CardContent className={classes.cardContent}>
-                        {item.body}
-                    </CardContent>
-                    <div className="flex justify-between">
-                        <CardActions>
-                            <IconButton className={classes.icon}>
-                                <FontAwesomeIcon icon={faHeart} />
-                            </IconButton>
-                        </CardActions>
-                        <CardActions>
-                            {session?.user.id === note.userId && (
-                                <>
-                                    <IconButton className={classes.icon}>
-                                        <FontAwesomeIcon icon={faPen} />
-                                    </IconButton>
-                                    <IconButton className={classes.icon}>
-                                        <FontAwesomeIcon icon={faTrash} />
-                                    </IconButton>
-                                </>
-                            )}
-                        </CardActions>
-                    </div>
-                </Card>
+                        )}
+                    </CardActions>
+                </div>
             </>
         )
     }
@@ -270,10 +271,6 @@ const FindItemsByNoteId = (props: Props) => {
                                 <TimelineItem
                                     className={classes.timeline}
                                 >
-                                    <TimelineSeparator>
-                                        <TimelineDot />
-                                        {items.length !== i + 1 ? <TimelineConnector /> : null}
-                                    </TimelineSeparator>
                                     <TimelineContent>{timelineContent(item)}</TimelineContent>
                                 </TimelineItem>
                             </div>
