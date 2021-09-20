@@ -62,7 +62,7 @@ export const NoteCreateModal = ({
         }).then((res) => {
             setSubmitting(false);
             res.json().then(r => {
-                router.push(`items/${r.id}`)
+                router.push(`/items/${r.id}`)
             })
         })
         .catch(err => {

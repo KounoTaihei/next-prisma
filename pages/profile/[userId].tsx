@@ -1,5 +1,5 @@
 import { User } from ".prisma/client";
-import { Avatar, Button, List, ListItem, ListItemText, Typography } from "@material-ui/core";
+import { Avatar, Button, IconButton, List, ListItem, ListItemText, Typography } from "@material-ui/core";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { signOut, useSession } from "next-auth/client";
 import prisma from "../../lib/prisma";
@@ -12,11 +12,16 @@ import { revalidateTime } from "../../lib/revalidate_time";
 import { useState } from "react";
 import { NoteWithItems } from "../../types/note";
 import { getNoteListSortedByItemCreatedAt } from "../../functions/get_note_list_sorted_by_item_created_at";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { NoteCreateModal } from "../../components/notes/note_create.modal";
 
 const Profile = (props: Props) => {
     const [ user, setUser ] = useState<User>(props.user);
     const [ notes, setNotes ] = useState<NoteWithItems[]>(getNoteListSortedByItemCreatedAt(props.notes));
     const [ session ] = useSession();
+
+    const [ noteCreateModalOpen, setNoteCreateModalOpen ] = useState<boolean>(false);
 
     const useStyles = makeStyles(() =>
         createStyles({
@@ -29,6 +34,10 @@ const Profile = (props: Props) => {
             },
             button: {
                 width: "100%"
+            },
+            plusIcon: {
+                padding: "0.3rem",
+                fontSize: "1rem"
             }
         })
     );
@@ -49,9 +58,15 @@ const Profile = (props: Props) => {
                                     <tbody>
                                         <tr><th className="px-2">登録日</th><td className="px-2">{getFormattedDate(user.createdAt)}</td></tr>
                                         <tr><th className="px-2">ノート数</th><td className="px-2">{notes.length}</td></tr>
-                                        <tr><th className="px-2">最新の投稿</th><td className="px-2">{getFormattedDate(getLatestDate(
-                                            notes.map(note => note.createdAt)
-                                        ))}</td></tr>
+                                        <tr><th className="px-2">最新の投稿</th>
+                                            <td className="px-2">
+                                                {notes.length ? (
+                                                    getFormattedDate(getLatestDate(
+                                                        notes.map(note => note.createdAt)
+                                                    ))
+                                                ) : "ノート無し"}
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </>
@@ -63,7 +78,22 @@ const Profile = (props: Props) => {
                 </div>
             </List>
             <List>
-                <div className="text-center font-bold border-b-2 w-3/4 mx-auto">ノート一覧</div>
+                <div className="text-center font-bold border-b-2 w-3/4 mx-auto relative">
+                    <span>ノート一覧</span>
+                    {session && (session.user.id === user.id) && (
+                        <>
+                            <div className="absolute right-0 bottom-0">
+                                <IconButton className={classes.plusIcon} onClick={() => setNoteCreateModalOpen(true)}>
+                                    <FontAwesomeIcon icon={faPlus} />
+                                </IconButton>
+                            </div>
+                            <NoteCreateModal
+                                modalOpen={noteCreateModalOpen}
+                                setModalOpen={setNoteCreateModalOpen}
+                            />
+                        </>
+                    )}
+                </div>
                 {notes.map(note =>
                     <Link key={note.id} href={`/items/${note.id}`} passHref>
                         <Button className={classes.button}>

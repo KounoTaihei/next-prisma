@@ -60,6 +60,12 @@ const FindItemsByNoteId = (props: Props) => {
     },[itemCreateModalOpen])
 
     useEffect(() => {
+        if((session && session.user.id === note.user.id) && !noteDeleteModalOpen) {
+            getItems();
+        }
+    },[noteDeleteModalOpen])
+
+    useEffect(() => {
         if((session && session.user.id === note.user.id) && !noteUpdateModalOpen) {
             getNote();
         }

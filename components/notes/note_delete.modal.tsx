@@ -71,7 +71,8 @@ export const NoteDeleteModal = ({
         await fetch(`${apiUrl}/items/all/${note.id}`, {
             method: 'DELETE'
         }).then(() => {
-            router.reload();
+            setSubmitting(false);
+            setModalOpen(false);
         })
         .catch(err => {
             setSubmitting(false);
