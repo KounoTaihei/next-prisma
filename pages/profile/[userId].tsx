@@ -11,14 +11,14 @@ import { createStyles, makeStyles } from "@material-ui/styles";
 import { revalidateTime } from "../../lib/revalidate_time";
 import { useState } from "react";
 import { NoteWithItems } from "../../types/note";
-import { getNoteListSortedByItemCreatedAt } from "../../functions/get_note_list_sorted_by_item_created_at";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { NoteCreateModal } from "../../components/notes/note_create.modal";
+import { getSortedNotes } from "../../functions/get_sorted_notes";
 
 const Profile = (props: Props) => {
     const [ user, setUser ] = useState<User>(props.user);
-    const [ notes, setNotes ] = useState<NoteWithItems[]>(getNoteListSortedByItemCreatedAt(props.notes));
+    const [ notes, setNotes ] = useState<NoteWithItems[]>(getSortedNotes(props.notes, 0, 0));
     const [ session ] = useSession();
 
     const [ noteCreateModalOpen, setNoteCreateModalOpen ] = useState<boolean>(false);
