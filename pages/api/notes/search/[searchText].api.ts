@@ -7,18 +7,30 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     switch (method) {
         case 'GET': {
             const text = req.query.searchText.toString();
-            const notes: NoteWithUserAndItems[] = await prisma.note.findMany({
-                where: {
-                    title: {
-                        contains: text
+            let notes: NoteWithUserAndItems[]
+
+            if(text) {
+                notes = await prisma.note.findMany({
+                    where: {
+                        title: {
+                            contains: text
+                        }
+                    },
+                    include: {
+                        user: true,
+                        items: true
                     }
-                },
-                include: {
-                    user: true,
-                    items: true
-                }
-            })
-            .then(res => JSON.parse(JSON.stringify(res)));
+                })
+                .then(res => JSON.parse(JSON.stringify(res)));
+            } else {
+                notes = await prisma.note.findMany({
+                    include: {
+                        user: true,
+                        items: true
+                    }
+                })
+                .then(res => JSON.parse(JSON.stringify(res)));
+            }
 
             res.status(200).json(notes);
             break;

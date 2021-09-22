@@ -42,13 +42,7 @@ const Notes = (props: Props) => {
     /** ノートを検索 */
     const search = async () => {
         setLoading(true);
-        let data: NoteWithUserAndItems[]
-
-        if(!searchText) {
-            data = await fetch('/api/notes').then(res => res.json());
-        } else {
-            data = await fetch(`/api/notes/search/${searchText}`).then(res => res.json());
-        }
+        const data: NoteWithUserAndItems[] = await fetch(`/api/notes/search/${searchText}`).then(res => res.json());
         setNotes(getSortedNotes(data, orderBy, ascOrDesc));
         setLoading(false);
     }
