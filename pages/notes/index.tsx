@@ -6,7 +6,7 @@ import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Image from 'next/image';
 import { getFormattedDate } from "../../functions/get_formatted_date";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faPen, faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faPen, faPlus, faSearch, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { getLatestDate } from "../../functions/get_latest_date";
 import { useEffect, useState } from "react";
 import { NoteCreateModal } from '../../components/notes/note_create.modal';
@@ -16,9 +16,9 @@ import { NoteWithUserAndItems } from "../../types/note";
 import { getSortedNotes } from "../../functions/get_sorted_notes";
 
 const Notes = (props: Props) => {
+    const [ notes, setNotes ] = useState<NoteWithUserAndItems[]>(getSortedNotes(props.notes, 0, 0));
     const [ orderBy, setOrderBy ] = useState<number>(0);
     const [ ascOrDesc, setAscOrDesc ] = useState<number>(0);
-    const [ notes, setNotes ] = useState<NoteWithUserAndItems[]>(getSortedNotes(props.notes, orderBy, ascOrDesc));
     const [ modalOpen, setModalOpen ] = useState<boolean>(false);
     
     const [ menuOpen, setMenuOpen ] = useState<boolean>(false);
@@ -35,6 +35,9 @@ const Notes = (props: Props) => {
                 fontSize: "1.2em",
                 padding: "0.8rem"
             },
+            formControl: {
+                margin: "0.3rem",
+            }
         })
     );
     const classes = useStyles();
@@ -46,15 +49,6 @@ const Notes = (props: Props) => {
         setNotes(getSortedNotes(data, orderBy, ascOrDesc));
         setLoading(false);
     }
-
-    // ソート
-    const sort = () => {
-        setNotes(getSortedNotes(notes, orderBy, ascOrDesc));
-    }
-
-    useEffect(() => {
-        sort();        
-    },[orderBy, ascOrDesc])
 
     return (
         <>
@@ -76,53 +70,53 @@ const Notes = (props: Props) => {
                         <FontAwesomeIcon icon={faPlus} />
                     </IconButton>
                 </div>
-                <div className="w-full bg-green-50 text-center">
-                    <FormControl variant="standard">
-                        <InputLabel htmlFor="searchInput">ノートを検索</InputLabel>
-                        <Input
-                            id="searchInput"
-                            onChange={(e) => setSearchText(e.target.value)}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton onClick={search} className={classes.icon}>
-                                        <FontAwesomeIcon icon={faSearch} />
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                        />
-                    </FormControl>
-                    <div className="flex justify-evenly">
-                        <FormControl>
-                            <InputLabel variant="standard" htmlFor="orderbyInput">
-                                並び替え
-                            </InputLabel>
-                            <NativeSelect
-                                defaultValue={0}
-                                inputProps={{
-                                    id: "orderbyInput"
-                                }}
-                                onChange={(e) => setOrderBy(Number(e.target.value))}
-                            >
-                                <option value={0}>ノート内のアイテムの作成日</option>
-                                <option value={1}>ノートの作成日</option>
-                                <option value={2}>ノート内のアイテムの数</option>
-                            </NativeSelect>
+                <div className="flex items-center w-full bg-green-50 text-center p-2">
+                    <div className="w-full">
+                        <FormControl variant="standard" className={classes.formControl}>
+                            <InputLabel htmlFor="searchInput">ノートを検索</InputLabel>
+                            <Input
+                                id="searchInput"
+                                onChange={(e) => setSearchText(e.target.value)}
+                            />
                         </FormControl>
-                        <FormControl>
-                            <InputLabel variant="standard" htmlFor="ascOrDescInput">
-                                順
-                            </InputLabel>
-                            <NativeSelect
-                                defaultValue={0}
-                                inputProps={{
-                                    id: "ascOrDescInput"
-                                }}
-                                onChange={(e) => setAscOrDesc(Number(e.target.value))}
-                            >
-                                <option value={0}>降順</option>
-                                <option value={1}>昇順</option>
-                            </NativeSelect>
-                        </FormControl>
+                        <div className="flex justify-evenly">
+                            <FormControl className={classes.formControl}>
+                                <InputLabel variant="standard" htmlFor="orderbyInput">
+                                    並び替え
+                                </InputLabel>
+                                <NativeSelect
+                                    defaultValue={0}
+                                    inputProps={{
+                                        id: "orderbyInput"
+                                    }}
+                                    onChange={(e) => setOrderBy(Number(e.target.value))}
+                                >
+                                    <option value={0}>ノート内のアイテムの作成日</option>
+                                    <option value={1}>ノートの作成日</option>
+                                    <option value={2}>ノート内のアイテムの数</option>
+                                </NativeSelect>
+                            </FormControl>
+                            <FormControl className={classes.formControl}>
+                                <InputLabel variant="standard" htmlFor="ascOrDescInput">
+                                    順
+                                </InputLabel>
+                                <NativeSelect
+                                    defaultValue={0}
+                                    inputProps={{
+                                        id: "ascOrDescInput"
+                                    }}
+                                    onChange={(e) => setAscOrDesc(Number(e.target.value))}
+                                >
+                                    <option value={0}>降順</option>
+                                    <option value={1}>昇順</option>
+                                </NativeSelect>
+                            </FormControl>
+                        </div>
+                    </div>
+                    <div>
+                        <IconButton className={classes.icon} onClick={search}>
+                            <FontAwesomeIcon icon={faSyncAlt} />
+                        </IconButton>
                     </div>
                 </div>
             </div>
