@@ -1,13 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { NoteWithUserAndItems } from "../../../../types/note";
 
-export default async function handler (req: NextApiRequest, res: NextApiResponse<NoteWithUserAndItems[]>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const method = req.method;
 
     switch (method) {
-        case 'GET': {
-            const text = req.query.searchText.toString();
-            let notes: NoteWithUserAndItems[]
+        case 'POST': {
+            const text: string = req.body.searchText;
+            let notes: NoteWithUserAndItems[];
 
             if(text) {
                 notes = await prisma.note.findMany({
@@ -31,7 +31,7 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
                 })
                 .then(res => JSON.parse(JSON.stringify(res)));
             }
-
+            
             res.status(200).json(notes);
             break;
         }

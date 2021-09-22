@@ -6,14 +6,15 @@ import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Image from 'next/image';
 import { getFormattedDate } from "../../functions/get_formatted_date";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faPen, faPlus, faSearch, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faPen, faPlus, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { getLatestDate } from "../../functions/get_latest_date";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NoteCreateModal } from '../../components/notes/note_create.modal';
 import { BreadCrumbs } from "../../components/breadcrumbs";
 import { revalidateTime } from "../../lib/revalidate_time";
 import { NoteWithUserAndItems } from "../../types/note";
 import { getSortedNotes } from "../../functions/get_sorted_notes";
+import styles from '../../styles/Note.module.scss';
 
 const Notes = (props: Props) => {
     const [ notes, setNotes ] = useState<NoteWithUserAndItems[]>(getSortedNotes(props.notes, 0, 0));
@@ -31,12 +32,23 @@ const Notes = (props: Props) => {
             button: {
                 width: "100%"
             },
+            openIconActive: {
+                transform: "rotate(180deg)",
+                transitionDuration: "0.3s"
+            },
+            openIcon: {
+                transform: "ratate(0)",
+                transitionDuration: "0.3s"
+            },
             icon: {
-                fontSize: "1.2em",
-                padding: "0.8rem"
+                fontSize: "1.4em",
+                padding: "1rem"
             },
             formControl: {
                 margin: "0.3rem",
+            },
+            searchInput: {
+                width: "70%"
             }
         })
     );
@@ -45,7 +57,19 @@ const Notes = (props: Props) => {
     /** ノートを検索 */
     const search = async () => {
         setLoading(true);
-        const data: NoteWithUserAndItems[] = await fetch(`/api/notes/search/${searchText}`).then(res => res.json());
+
+        const body = {
+            searchText: searchText
+        }
+        const data: NoteWithUserAndItems[] = await fetch('/api/notes/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+        .then(res => res.json());
+
         setNotes(getSortedNotes(data, orderBy, ascOrDesc));
         setLoading(false);
     }
@@ -56,12 +80,13 @@ const Notes = (props: Props) => {
                 current="ノート一覧"
             />
             {/* 検索メニュー等 */}
-            <div className="relative">
+            <div className={menuOpen ? `${styles.menu_wrapper} ${styles.active}` : styles.menu_wrapper}>
                 <div className="flex justify-between">
                     <IconButton
                         className={classes.icon}
+                        onClick={() => setMenuOpen(!menuOpen)}
                     >
-                        <FontAwesomeIcon icon={faChevronDown} />
+                        <FontAwesomeIcon icon={faChevronDown} className={menuOpen ? classes.openIconActive : classes.openIcon} />
                     </IconButton>
                     <IconButton
                         onClick={() => setModalOpen(true)}
@@ -70,15 +95,11 @@ const Notes = (props: Props) => {
                         <FontAwesomeIcon icon={faPlus} />
                     </IconButton>
                 </div>
-                <div className="flex items-center w-full bg-green-50 text-center p-2">
+                {/* 検索、ソートメニュー */}
+                <div
+                    className={menuOpen ? `${styles.menu} ${styles.active}` : styles.menu}
+                >
                     <div className="w-full">
-                        <FormControl variant="standard" className={classes.formControl}>
-                            <InputLabel htmlFor="searchInput">ノートを検索</InputLabel>
-                            <Input
-                                id="searchInput"
-                                onChange={(e) => setSearchText(e.target.value)}
-                            />
-                        </FormControl>
                         <div className="flex justify-evenly">
                             <FormControl className={classes.formControl}>
                                 <InputLabel variant="standard" htmlFor="orderbyInput">
@@ -112,6 +133,14 @@ const Notes = (props: Props) => {
                                 </NativeSelect>
                             </FormControl>
                         </div>
+                        <FormControl fullWidth variant="standard" className={classes.formControl}>
+                            <InputLabel htmlFor="searchInput">ノートを検索</InputLabel>
+                            <Input
+                                id="searchInput"
+                                onChange={(e) => setSearchText(e.target.value)}
+                                className={classes.searchInput}
+                            />
+                        </FormControl>
                     </div>
                     <div>
                         <IconButton className={classes.icon} onClick={search}>
