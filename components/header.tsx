@@ -7,6 +7,7 @@ import humanImage from '../public/human.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 const Header = () => {
     const [ session ] = useSession();
@@ -26,13 +27,15 @@ const Header = () => {
                 backgroundColor: "#fff"
             },
             menu: {
-                width: "70vw",
-                backgroundColor: "#ECFDF5",
+                width: "65vw",
                 height: "100%"
             },
             menuItem: {
                 padding: "10px",
                 width: "auto"
+            },
+            icon: {
+                fontSize: "2rem"
             }
         })
     );
@@ -43,19 +46,30 @@ const Header = () => {
 
     const menuContents = (
         <List className={classes.menu}>
-            <Link href="/notes" passHref>
-                <ListItem
-                    button
-                    className={classes.menuItem}
-                    onClick={() => setMenuOpening(false)}
-                >
-                    <Button
-                        startIcon={<FontAwesomeIcon icon={faBookOpen} />}
-                    >
-                        ノート一覧
-                    </Button>
-                </ListItem>
-            </Link>
+            <div className="flex flex-col justify-between h-full">
+                <div>
+                    <Link href="/notes" passHref>
+                        <ListItem
+                            button
+                            className={classes.menuItem}
+                            onClick={() => setMenuOpening(false)}
+                        >
+                            <Button
+                                startIcon={<FontAwesomeIcon icon={faBookOpen} />}
+                            >
+                                ノート一覧
+                            </Button>
+                        </ListItem>
+                    </Link>
+                </div>
+                <div className="text-right">
+                    <a href="https://github.com/KounoTaihei/note-app">
+                        <IconButton>
+                            <FontAwesomeIcon className={classes.icon} icon={faGithub} />
+                        </IconButton>
+                    </a>
+                </div>
+            </div>
         </List>
     )
     /** --- */
