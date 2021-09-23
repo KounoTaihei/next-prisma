@@ -1,7 +1,7 @@
 import prisma from "../../lib/prisma";
 import { GetStaticProps } from "next";
 import Link from "next/link";
-import { Avatar, Button, CircularProgress, FormControl, IconButton, InputLabel, List, ListItem, ListItemAvatar, ListItemText, NativeSelect, TextField } from "@material-ui/core";
+import { Avatar, Button, CircularProgress, FormControl, FormControlLabel, IconButton, InputLabel, List, ListItem, ListItemAvatar, ListItemText, NativeSelect, Radio, RadioGroup, TextField } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Image from 'next/image';
 import { getFormattedDate } from "../../functions/get_formatted_date";
@@ -45,7 +45,11 @@ const Notes = (props: Props) => {
                 margin: "0.3rem",
             },
             searchInput: {
-                width: "70%"
+                width: "80%",
+                margin: "0 auto"
+            },
+            radioButton: {
+                color: "pink"
             }
         })
     );
@@ -99,7 +103,7 @@ const Notes = (props: Props) => {
                 </div>
                 {/* 検索、ソートメニュー */}
                 <div className="bg-white relative">
-                <div className={menuOpen ? `${styles.overlay} ${styles.active}` : styles.overlay} onClick={() => setMenuOpen(false)}></div>
+                    <div className={menuOpen ? `${styles.overlay} ${styles.active}` : styles.overlay} onClick={() => setMenuOpen(false)}></div>
                     <Formik
                         initialValues={initialValues}
                         onSubmit={submit}
@@ -113,39 +117,52 @@ const Notes = (props: Props) => {
                         }) => (
                             <form onSubmit={handleSubmit} className={menuOpen ? `${styles.menu} ${styles.active}` : styles.menu}>
                                 <div className="w-full">
-                                    <div className="flex justify-evenly">
-                                        <FormControl className={classes.formControl}>
-                                            <InputLabel variant="standard" htmlFor="orderbyInput">
-                                                並び替え
-                                            </InputLabel>
-                                            <NativeSelect
-                                                id="orderByInput"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.orderBy}
-                                                name="orderBy"
-                                            >
-                                                <option value={0}>ノート内のアイテムの作成日</option>
-                                                <option value={1}>ノートの作成日</option>
-                                                <option value={2}>ノート内のアイテムの数</option>
-                                            </NativeSelect>
-                                        </FormControl>
-                                        <FormControl className={classes.formControl}>
-                                            <InputLabel variant="standard" htmlFor="ascOrDescInput">
-                                                順
-                                            </InputLabel>
-                                            <NativeSelect
-                                                id="ascOrDescInput"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.ascOrDesc}
-                                                name="ascOrDesc"
-                                            >
-                                                <option value={0}>降順</option>
-                                                <option value={1}>昇順</option>
-                                            </NativeSelect>
-                                        </FormControl>
-                                    </div>
+                                    <FormControl className={classes.formControl}>
+                                        <InputLabel variant="standard" htmlFor="orderbyInput">
+                                            並び替え
+                                        </InputLabel>
+                                        <NativeSelect
+                                            id="orderByInput"
+                                            name="orderBy"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.orderBy}
+                                        >
+                                            <option value={0}>ノート内のアイテムの作成日</option>
+                                            <option value={1}>ノートの作成日</option>
+                                            <option value={2}>ノート内のアイテムの数</option>
+                                        </NativeSelect>
+                                    </FormControl>
+                                    <FormControl className={classes.formControl}>
+                                        <RadioGroup
+                                            row
+                                            name="ascOrDesc"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.ascOrDesc}
+                                        >
+                                            <FormControlLabel
+                                                value={0}
+                                                label="降順"
+                                                control={
+                                                    <Radio
+                                                        color="primary"
+                                                        checked={values.ascOrDesc === "0" ? true : false}
+                                                    />
+                                                }
+                                            />
+                                            <FormControlLabel
+                                                value={1}
+                                                label="昇順"
+                                                control={
+                                                    <Radio
+                                                        color="primary"
+                                                        checked={values.ascOrDesc === "1" ? true : false}
+                                                    />
+                                                }
+                                            />
+                                        </RadioGroup>
+                                    </FormControl>
                                     <FormControl fullWidth variant="standard" className={classes.formControl}>
                                         <TextField
                                             label="ノートを検索"
@@ -153,6 +170,7 @@ const Notes = (props: Props) => {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                             value={values.searchText}
+                                            className={classes.searchInput}
                                         />
                                     </FormControl>
                                 </div>

@@ -5,7 +5,7 @@ import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogC
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import * as Yup from 'yup';
 import { getFormattedDate } from "../../functions/get_formatted_date";
 
@@ -158,24 +158,7 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                                         </IconButton>
                                     </div>
                                     <div className="text-center flex items-center">
-                                        {/* <div className="w-96">
-                                            <img src={previewUrl_1} className="py-4 mx-auto" />
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                name="image_1"
-                                                onChange={setPreview_1}
-                                            />
-                                        </div> */}
-                                        {/* <div className="w-96">
-                                            <img src={previewUrl_2} className="py-4 mx-auto" />
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                name="image_2"
-                                                onChange={setPreview_2}
-                                            />
-                                        </div> */}
+                                        {/* ここに画像のinputを配置する */}
                                     </div>
                                 </div>
                                 <div>
