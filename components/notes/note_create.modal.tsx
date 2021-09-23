@@ -59,7 +59,8 @@ export const NoteCreateModal = ({
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(values)
-        }).then((res) => {
+        })
+        .then((res) => {
             setSubmitting(false);
             res.json().then(r => {
                 router.push(`/items/${r.id}`)

@@ -1,7 +1,7 @@
 import prisma from "../../lib/prisma";
 import { GetStaticProps } from "next";
 import Link from "next/link";
-import { Avatar, Button, CircularProgress, FormControl, IconButton, Input, InputAdornment, InputLabel, List, ListItem, ListItemAvatar, ListItemText, NativeSelect } from "@material-ui/core";
+import { Avatar, Button, CircularProgress, FormControl, IconButton, InputLabel, List, ListItem, ListItemAvatar, ListItemText, NativeSelect, TextField } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Image from 'next/image';
 import { getFormattedDate } from "../../functions/get_formatted_date";
@@ -15,17 +15,14 @@ import { revalidateTime } from "../../lib/revalidate_time";
 import { NoteWithUserAndItems } from "../../types/note";
 import { getSortedNotes } from "../../functions/get_sorted_notes";
 import styles from '../../styles/Note.module.scss';
+import { Formik } from "formik";
 
 const Notes = (props: Props) => {
-    const [ notes, setNotes ] = useState<NoteWithUserAndItems[]>(getSortedNotes(props.notes, 0, 0));
-    const [ orderBy, setOrderBy ] = useState<number>(0);
-    const [ ascOrDesc, setAscOrDesc ] = useState<number>(0);
+    const [ notes, setNotes ] = useState<NoteWithUserAndItems[]>(getSortedNotes(props.notes, "0", "0"));
     const [ modalOpen, setModalOpen ] = useState<boolean>(false);
+    const [ submitting, setSubmitting ] = useState<boolean>(false);
     
     const [ menuOpen, setMenuOpen ] = useState<boolean>(false);
-
-    const [ loading, setLoading ] = useState<boolean>(false);
-    const [ searchText, setSearchText ] = useState<string>('');
 
     const useStyles = makeStyles(() =>
         createStyles({
@@ -54,24 +51,29 @@ const Notes = (props: Props) => {
     );
     const classes = useStyles();
 
-    /** ノートを検索 */
-    const search = async () => {
-        setLoading(true);
+    const initialValues: FormValues = {
+        searchText: "",
+        orderBy: "0",
+        ascOrDesc: "0"
+    }
 
-        const body = {
-            searchText: searchText
+    const submit = async (values: FormValues) => {
+        setSubmitting(true);
+        console.log(values);
+
+        let data: NoteWithUserAndItems[];
+        if(values.searchText) {
+            data = await fetch(`/api/notes/${values.searchText}`)
+            .then(res => res.json());
+        } else {
+            data = await fetch('/api/notes')
+            .then(res => res.json());
         }
-        const data: NoteWithUserAndItems[] = await fetch('/api/notes/search', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        })
-        .then(res => res.json());
 
-        setNotes(getSortedNotes(data, orderBy, ascOrDesc));
-        setLoading(false);
+        const newNotes = getSortedNotes(data, values.orderBy, values.ascOrDesc);
+        setNotes(newNotes);
+
+        setSubmitting(false);
     }
 
     return (
@@ -96,65 +98,80 @@ const Notes = (props: Props) => {
                     </IconButton>
                 </div>
                 {/* 検索、ソートメニュー */}
-                <div
-                    className={menuOpen ? `${styles.menu} ${styles.active}` : styles.menu}
-                >
-                    <div className="w-full">
-                        <div className="flex justify-evenly">
-                            <FormControl className={classes.formControl}>
-                                <InputLabel variant="standard" htmlFor="orderbyInput">
-                                    並び替え
-                                </InputLabel>
-                                <NativeSelect
-                                    defaultValue={0}
-                                    inputProps={{
-                                        id: "orderbyInput"
-                                    }}
-                                    onChange={(e) => setOrderBy(Number(e.target.value))}
-                                >
-                                    <option value={0}>ノート内のアイテムの作成日</option>
-                                    <option value={1}>ノートの作成日</option>
-                                    <option value={2}>ノート内のアイテムの数</option>
-                                </NativeSelect>
-                            </FormControl>
-                            <FormControl className={classes.formControl}>
-                                <InputLabel variant="standard" htmlFor="ascOrDescInput">
-                                    順
-                                </InputLabel>
-                                <NativeSelect
-                                    defaultValue={0}
-                                    inputProps={{
-                                        id: "ascOrDescInput"
-                                    }}
-                                    onChange={(e) => setAscOrDesc(Number(e.target.value))}
-                                >
-                                    <option value={0}>降順</option>
-                                    <option value={1}>昇順</option>
-                                </NativeSelect>
-                            </FormControl>
-                        </div>
-                        <FormControl fullWidth variant="standard" className={classes.formControl}>
-                            <InputLabel htmlFor="searchInput">ノートを検索</InputLabel>
-                            <Input
-                                id="searchInput"
-                                onChange={(e) => setSearchText(e.target.value)}
-                                className={classes.searchInput}
-                            />
-                        </FormControl>
-                    </div>
-                    <div>
-                        <IconButton className={classes.icon} onClick={search}>
-                            <FontAwesomeIcon icon={faSyncAlt} />
-                        </IconButton>
-                    </div>
+                <div className="bg-white relative">
+                <div className={menuOpen ? `${styles.overlay} ${styles.active}` : styles.overlay} onClick={() => setMenuOpen(false)}></div>
+                    <Formik
+                        initialValues={initialValues}
+                        onSubmit={submit}
+                    >
+                        {({
+                            values,
+                            handleChange,
+                            handleBlur,
+                            handleSubmit,
+                            isSubmitting
+                        }) => (
+                            <form onSubmit={handleSubmit} className={menuOpen ? `${styles.menu} ${styles.active}` : styles.menu}>
+                                <div className="w-full">
+                                    <div className="flex justify-evenly">
+                                        <FormControl className={classes.formControl}>
+                                            <InputLabel variant="standard" htmlFor="orderbyInput">
+                                                並び替え
+                                            </InputLabel>
+                                            <NativeSelect
+                                                id="orderByInput"
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                value={values.orderBy}
+                                                name="orderBy"
+                                            >
+                                                <option value={0}>ノート内のアイテムの作成日</option>
+                                                <option value={1}>ノートの作成日</option>
+                                                <option value={2}>ノート内のアイテムの数</option>
+                                            </NativeSelect>
+                                        </FormControl>
+                                        <FormControl className={classes.formControl}>
+                                            <InputLabel variant="standard" htmlFor="ascOrDescInput">
+                                                順
+                                            </InputLabel>
+                                            <NativeSelect
+                                                id="ascOrDescInput"
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                value={values.ascOrDesc}
+                                                name="ascOrDesc"
+                                            >
+                                                <option value={0}>降順</option>
+                                                <option value={1}>昇順</option>
+                                            </NativeSelect>
+                                        </FormControl>
+                                    </div>
+                                    <FormControl fullWidth variant="standard" className={classes.formControl}>
+                                        <TextField
+                                            label="ノートを検索"
+                                            name="searchText"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.searchText}
+                                        />
+                                    </FormControl>
+                                </div>
+                                <div className={submitting ? `${styles.submitbtn} ${styles.active}` : styles.submitbtn}>
+                                    <IconButton className={classes.icon} type="submit" disabled={isSubmitting}>
+                                        <FontAwesomeIcon icon={faSyncAlt} />
+                                    </IconButton>
+                                </div>
+                            </form>
+                        )}
+                    </Formik>
                 </div>
             </div>
-            {loading && (
+            {submitting && (
                 <div className="text-center py-8">
                     <CircularProgress color="primary"/>
                 </div>
             )}
-            {!loading && (
+            {!submitting && (
                 <List>
                     {notes.map(note =>
                         <Link href={`/items/${note.id}`} key={note.id} passHref>
@@ -216,6 +233,12 @@ export const getStaticProps: GetStaticProps = async () => {
 
 interface Props {
     notes: NoteWithUserAndItems[]
+}
+
+interface FormValues {
+    searchText: string
+    orderBy: string
+    ascOrDesc: string
 }
 
 export default Notes;

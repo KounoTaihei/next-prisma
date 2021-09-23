@@ -11,7 +11,7 @@ import { getLatestDate } from "./get_latest_date";
  *            1 => 昇順
  *  ------ */
 
-export const getSortedNotes = (notes: NoteWithUserAndItems[] | NoteWithItems[], orderBy: number, ascOrDesc: number): any[] => {
+export const getSortedNotes = (notes: NoteWithUserAndItems[] | NoteWithItems[], orderBy: string, ascOrDesc: string): any[] => {
     if(!notes) {
         return [];
     }
@@ -19,14 +19,14 @@ export const getSortedNotes = (notes: NoteWithUserAndItems[] | NoteWithItems[], 
     /** 降順昇順を切り替え */
     let adjust_num: number;
 
-    if(ascOrDesc === 0) {
+    if(ascOrDesc === "0") {
         adjust_num = 1;
-    } else if(ascOrDesc === 1) {
+    } else if(ascOrDesc === "1") {
         adjust_num = -1;
     }
 
     switch(orderBy) {
-        case 0: {
+        case "0": {
             return notes.sort(function(a, b) {
                 if(!b.items.length) {
                     return -1 * adjust_num;
@@ -41,7 +41,7 @@ export const getSortedNotes = (notes: NoteWithUserAndItems[] | NoteWithItems[], 
             });
             break;
         }
-        case 1: {
+        case "1": {
             return notes.sort(function(a, b) {
                 if(new Date(a.createdAt) > new Date(b.createdAt)) {
                     return -1 * adjust_num;
@@ -51,7 +51,7 @@ export const getSortedNotes = (notes: NoteWithUserAndItems[] | NoteWithItems[], 
             });
             break;
         }
-        case 2: {
+        case "2": {
             return notes.sort(function(a, b) {
                 if(!b.items.length) {
                     return -1 * adjust_num;

@@ -18,7 +18,7 @@ import { getSortedNotes } from "../../functions/get_sorted_notes";
 
 const Profile = (props: Props) => {
     const [ user, setUser ] = useState<User>(props.user);
-    const [ notes, setNotes ] = useState<NoteWithItems[]>(getSortedNotes(props.notes, 0, 0));
+    const [ notes, setNotes ] = useState<NoteWithItems[]>(getSortedNotes(props.notes, "0", "0"));
     const [ session ] = useSession();
 
     const [ noteCreateModalOpen, setNoteCreateModalOpen ] = useState<boolean>(false);
