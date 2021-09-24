@@ -186,7 +186,7 @@ const Notes = (props: Props) => {
             {!submitting && (
                 <List>
                     {notes.map(note =>
-                        <NoteItem note={note} />
+                        <NoteItem key={note.id} note={note} />
                     )}
                 </List>
             )}

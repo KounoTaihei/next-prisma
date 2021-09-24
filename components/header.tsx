@@ -81,7 +81,7 @@ const Header = () => {
                         <div>
                             <div className="text-center">スター付きアイテム</div>
                             {currentUser.stars.map(star =>
-                                <NoteItem note={star.note} header={true} />
+                                <NoteItem key={star.id} note={star.note} header={true} />
                             )}
                         </div>
                     )}

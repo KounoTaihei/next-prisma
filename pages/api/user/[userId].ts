@@ -16,7 +16,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                         include: {
                             note: {
                                 include: {
-                                    user: true,
                                     items: true
                                 }
                             }
