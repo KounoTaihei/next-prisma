@@ -32,6 +32,15 @@ model Item {
   updatedAt DateTime @updatedAt @map(name: "updatedAt")
   note Note @relation(fields: [noteId], references: [id])
   noteId String
+  hearts Heart[]
+}
+
+model Heart {
+  id String @id @default(cuid())
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  item Item @relation(fields: [itemId], references: [id])
+  itemId String
 }
 
 // 以下認証用
@@ -73,6 +82,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   notes         Note[]
+  hearts        Heart[]
 }
 
 model VerificationRequest {
