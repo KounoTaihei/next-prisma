@@ -1,13 +1,9 @@
 import prisma from "../../lib/prisma";
 import { GetStaticProps } from "next";
-import Link from "next/link";
-import { Avatar, Button, CircularProgress, FormControl, FormControlLabel, IconButton, InputLabel, List, ListItem, ListItemAvatar, ListItemText, NativeSelect, Radio, RadioGroup, TextField } from "@material-ui/core";
+import { CircularProgress, FormControl, FormControlLabel, IconButton, InputLabel, List, ListItem, ListItemAvatar, ListItemText, NativeSelect, Radio, RadioGroup, TextField } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import Image from 'next/image';
-import { getFormattedDate } from "../../functions/get_formatted_date";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faPen, faPlus, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
-import { getLatestDate } from "../../functions/get_latest_date";
 import { useState } from "react";
 import { NoteCreateModal } from '../../components/notes/note_create.modal';
 import { BreadCrumbs } from "../../components/breadcrumbs";
@@ -16,6 +12,7 @@ import { NoteWithUserAndItems } from "../../types/note";
 import { getSortedNotes } from "../../functions/get_sorted_notes";
 import styles from '../../styles/Note.module.scss';
 import { Formik } from "formik";
+import { NoteItem } from "../../components/notes/note_item";
 
 const Notes = (props: Props) => {
     const [ notes, setNotes ] = useState<NoteWithUserAndItems[]>(getSortedNotes(props.notes, "0", "0"));
@@ -26,9 +23,6 @@ const Notes = (props: Props) => {
 
     const useStyles = makeStyles(() =>
         createStyles({
-            button: {
-                width: "100%"
-            },
             openIconActive: {
                 transform: "rotate(180deg)",
                 transitionDuration: "0.3s"
@@ -192,35 +186,7 @@ const Notes = (props: Props) => {
             {!submitting && (
                 <List>
                     {notes.map(note =>
-                        <Link href={`/items/${note.id}`} key={note.id} passHref>
-                            <Button className={classes.button}>
-                                <ListItem key={note.id}>
-                                    <ListItemAvatar>
-                                        <Avatar>
-                                            <Image src={note.user.image!} layout="fill" loading="lazy" alt="作成者の画像" />
-                                        </Avatar>
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        primary={
-                                            <>
-                                                {note.title}（{note.items.length}）
-                                            </>
-                                        }
-                                        secondary={
-                                            <>
-                                                {note.user.name}が{getFormattedDate(note.createdAt)}に作成<br></br>
-                                                {note.items.length ?
-                                                    <>
-                                                        <FontAwesomeIcon icon={faPen} className="mr-1" />
-                                                        {getFormattedDate(getLatestDate(note.items.map(item => item.createdAt)))}
-                                                    </>
-                                                : ""}
-                                            </>
-                                        }
-                                        />
-                                </ListItem>
-                            </Button>
-                        </Link>
+                        <NoteItem key={note.id} note={note} />
                     )}
                 </List>
             )}

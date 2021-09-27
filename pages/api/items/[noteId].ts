@@ -1,7 +1,6 @@
 import { Item, Prisma } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
-import { ItemWithHearts } from '../../../types/item';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Item | Item[]>) {
     const method = req.method;
@@ -9,12 +8,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     switch (method) {
         case 'GET': {
             const noteId = req.query.noteId.toString();
-            const items: ItemWithHearts[] = await prisma.item.findMany({
+            const items: Item[] = await prisma.item.findMany({
                 where: {
                     noteId
-                },
-                include: {
-                    hearts: true
                 },
                 orderBy: {
                     createdAt: "desc"
