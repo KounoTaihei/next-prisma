@@ -6,27 +6,11 @@ import Image from 'next/image';
 import humanImage from '../public/human.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faBookOpen } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import { UserWithStarsWithNoteWithUserAndItems } from '../types/user';
-import { NoteItem } from './notes/note_item';
 
 const Header = () => {
-    const [ session, loading ] = useSession();
-    const [ currentUser, setCurrentUser ] = useState<UserWithStarsWithNoteWithUserAndItems | null>(null)
-
-    const getUser = async () => {
-        const data: UserWithStarsWithNoteWithUserAndItems = await fetch(`/api/user/${session?.user.id}`).then(res => res.json());
-        setCurrentUser(data);
-    }
-
-    useEffect(() => {
-        if(!loading) {
-            if(session) {
-                getUser();
-            }
-        }
-    },[loading])
+    const [ session ] = useSession();
 
     const useStyles = makeStyles(() => 
         createStyles({
@@ -43,7 +27,7 @@ const Header = () => {
                 backgroundColor: "#fff"
             },
             menu: {
-                width: "70vw",
+                width: "65vw",
                 height: "100%"
             },
             menuItem: {
@@ -77,17 +61,8 @@ const Header = () => {
                             </Button>
                         </ListItem>
                     </Link>
-                    {currentUser && (
-                        <div>
-                            <div className="text-center">スター付きアイテム</div>
-                            {currentUser.stars.map(star =>
-                                <NoteItem key={star.id} note={star.note} header={true} />
-                            )}
-                        </div>
-                    )}
                 </div>
                 <div className="text-right">
-                    {currentUser?.name}
                     <a href="https://github.com/KounoTaihei/note-app">
                         <IconButton>
                             <FontAwesomeIcon className={classes.icon} icon={faGithub} />

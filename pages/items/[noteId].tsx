@@ -1,4 +1,5 @@
 import { Item, Note } from "@prisma/client";
+import { ItemWithHearts } from '../../types/item';
 import { GetStaticPaths, GetStaticProps } from "next";
 import { getFormattedDate } from "../../functions/get_formatted_date";
 import prisma from "../../lib/prisma";
@@ -17,10 +18,12 @@ import { NoteUpdateModal } from "../../components/notes/note_update.modal";
 import { NoteDeleteModal } from "../../components/notes/note_delete.modal";
 import { NoteWithUser } from "../../types/note";
 import { revalidateTime } from "../../lib/revalidate_time";
+import { getHearted } from "../../functions/get_hearted";
+import { getActiveHeartId } from '../../functions/get_active_heart_id';
 
 const FindItemsByNoteId = (props: Props) => {
     const [ note, setNote ] = useState<NoteWithUser>(props.note);
-    const [ items, setItems ] = useState<Item[]>(props.items);
+    const [ items, setItems ] = useState<ItemWithHearts[]>(props.items);
     const [ value, setValue ] = useState<number>(0);
     const [ session ] = useSession();
 
@@ -43,10 +46,28 @@ const FindItemsByNoteId = (props: Props) => {
     /** アイテム一覧を再取得 */
     const getItems = async () => {
         try {
-            const data: Item[] | null = await fetch(`/api/items/${note.id}`).then(res => res.json());
+            const data: ItemWithHearts[] | null = await fetch(`/api/items/${note.id}`).then(res => res.json());
             if(data) {
                 setItems(data);
             }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    /** Heartを作成 */
+    const createHeart = async (itemId: string) => {
+        try {
+            await fetch(`/api/hearts/create/${itemId}`).then(() => {getItems()});
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    /** Heartを削除 */
+    const deleteHeart = async (heartId: string) => {
+        try {
+            await fetch(`/api/hearts/delete/${heartId}`).then(() => {getItems()});
         } catch (err) {
             console.log(err);
         }
@@ -77,8 +98,7 @@ const FindItemsByNoteId = (props: Props) => {
             position: "sticky",
             top: 0,
             backgroundColor: "rgba(255,255,255,0.9)",
-            zIndex: 10,
-            boxShadow: "2px 2px 2px gray"
+            zIndex: 10
         },
         timeline: {
             "&:before": {
@@ -102,11 +122,20 @@ const FindItemsByNoteId = (props: Props) => {
             margin: "0 5px"
         },
         icon: {
-            fontSize: "1.2em"
+            fontSize: "1.2em",
+            padding: "0.5rem"
         },
         titleText: {
             width: "fit-content",
-
+        },
+        flexActions: {
+            display: "flex",
+            alignItems: "center"
+        },
+        activeHeart: {
+            fontSize: "1.2em",
+            padding: "0.5rem",
+            color: "pink"
         }
     });
     const classes = useStyles();
@@ -125,7 +154,7 @@ const FindItemsByNoteId = (props: Props) => {
     /** --- */
 
     /** タイムライン */
-    const timelineContent = ( item: Item ) => {
+    const timelineContent = ( item: ItemWithHearts ) => {
         return (
             <>
                 <CardHeader
@@ -151,10 +180,25 @@ const FindItemsByNoteId = (props: Props) => {
                     {item.body}
                 </CardContent>
                 <div className="flex justify-between">
-                    <CardActions>
-                        <IconButton className={classes.icon}>
-                            <FontAwesomeIcon icon={faHeart} />
-                        </IconButton>
+                    <CardActions className={item.hearts ? classes.flexActions : ""}>
+                        {(session && getHearted(item, session.user.id)) && (
+                            <IconButton className={classes.activeHeart} onClick={() => deleteHeart(getActiveHeartId(item, session.user.id))}>
+                                <FontAwesomeIcon icon={faHeart} />
+                            </IconButton>
+                        )}
+                        {(session && !getHearted(item, session.user.id) && (
+                            <IconButton className={classes.icon} onClick={() => createHeart(item.id)}>
+                                <FontAwesomeIcon icon={faHeart} />
+                            </IconButton>
+                        ))}
+                        {!session && (
+                            <IconButton className={classes.icon}>
+                                <FontAwesomeIcon icon={faHeart} />
+                            </IconButton>
+                        )}
+                        {item.hearts && (
+                            <span>{item.hearts.length}</span>
+                        )}
                     </CardActions>
                     <CardActions>
                         {session?.user.id === note.userId && (
@@ -311,9 +355,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     })
     .then(res => JSON.parse(JSON.stringify(res)));
 
-    const items: Item[] = await prisma.item.findMany({
+    const items: ItemWithHearts[] = await prisma.item.findMany({
         where: {
             noteId
+        },
+        include: {
+            hearts: true
         },
         orderBy: {
             createdAt: "desc"
@@ -332,7 +379,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
 interface Props {
     note: NoteWithUser
-    items: Item[]
+    items: ItemWithHearts[]
 }
 
 export default FindItemsByNoteId;
