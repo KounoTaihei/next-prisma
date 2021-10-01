@@ -5,7 +5,7 @@ import { getFormattedDate } from "../../functions/get_formatted_date";
 import prisma from "../../lib/prisma";
 import Image from "next/image";
 import imageurl from "../../public/20141126_unsplash.webp";
-import { Avatar, CardActions, CardContent, CardHeader, IconButton, ImageList, ImageListItem, List, ListItem, ListItemAvatar, ListItemText, makeStyles, Tab, Tabs } from "@material-ui/core";
+import { Avatar, CardActions, CardContent, CardHeader, CircularProgress, IconButton, ImageList, ImageListItem, List, ListItem, ListItemAvatar, ListItemText, makeStyles, Tab, Tabs } from "@material-ui/core";
 import { Timeline, TimelineContent, TimelineItem } from '@material-ui/lab';
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/client";
@@ -26,6 +26,7 @@ const FindItemsByNoteId = (props: Props) => {
     const [ items, setItems ] = useState<ItemWithHearts[]>(props.items);
     const [ value, setValue ] = useState<number>(0);
     const [ session ] = useSession();
+    const [ processing, setProcessing ] = useState<boolean>(false);
 
     const [ itemCreateModalOpen, setItemCreateModalOpen ] = useState<boolean>(false);
     const [ noteUpdateModalOpen, setNoteUpdateModalOpen ] = useState<boolean>(false);
@@ -57,20 +58,24 @@ const FindItemsByNoteId = (props: Props) => {
 
     /** Heartを作成 */
     const createHeart = async (itemId: string) => {
+        setProcessing(true);
         try {
             await fetch(`/api/hearts/create/${itemId}`).then(() => {getItems()});
         } catch (err) {
             console.log(err);
         }
+        setProcessing(false);
     }
 
     /** Heartを削除 */
     const deleteHeart = async (heartId: string) => {
+        setProcessing(true);
         try {
             await fetch(`/api/hearts/delete/${heartId}`).then(() => {getItems()});
         } catch (err) {
             console.log(err);
         }
+        setProcessing(false);
     }
 
     /** ノートの作成者がログインユーザーならデータを再取得 */
@@ -331,6 +336,12 @@ const FindItemsByNoteId = (props: Props) => {
                 :
                 <p className="text-center">アイテムはありません</p>
             }
+            {/* 読み込み中の表示 */}
+            {processing && (
+                <div className="fixed flex justify-center items-center top-0 left-0 w-full h-full bg-black z-50 opacity-60">
+                    <CircularProgress />
+                </div>
+            )}
         </>
     )
 }

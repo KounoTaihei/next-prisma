@@ -9,6 +9,7 @@ import { faBars, faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
+
 const Header = () => {
     const [ session ] = useSession();
 
