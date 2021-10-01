@@ -103,7 +103,8 @@ const FindItemsByNoteId = (props: Props) => {
             position: "sticky",
             top: 0,
             backgroundColor: "rgba(255,255,255,0.9)",
-            zIndex: 10
+            zIndex: 10,
+            boxShadow: "2px 2px 2px gray"
         },
         timeline: {
             "&:before": {
