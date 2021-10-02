@@ -16,7 +16,6 @@ import { NoteWithUserAndItems } from "../../types/note";
 import { getSortedNotes } from "../../functions/get_sorted_notes";
 import styles from '../../styles/Note.module.scss';
 import { Formik } from "formik";
-import axios from 'axios';
 
 const Notes = (props: Props) => {
     const [ notes, setNotes ] = useState<NoteWithUserAndItems[]>(getSortedNotes(props.notes, "0", "0"));
@@ -64,20 +63,21 @@ const Notes = (props: Props) => {
 
     const submit = async (values: FormValues) => {
         setSubmitting(true);
-        console.log(values);
-        console.log(values.searchText)
-
-        let data: NoteWithUserAndItems[];
-        if(values.searchText) {
-            data = await axios.get(`/api/notes/search/${values.searchText}`)
-            .then(res => res.data);
-        } else {
-            data = await axios.get('/api/notes')
-            .then(res => res.data);
+        try {
+            let data: NoteWithUserAndItems[];
+            if(values.searchText) {
+                data = await fetch(`/api/notes/search/${values.searchText}`)
+                .then(res => res.json());
+            } else {
+                data = await fetch('/api/notes')
+                .then(res => res.json());
+            }
+            
+            const newNotes = getSortedNotes(data, values.orderBy, values.ascOrDesc);
+            setNotes(newNotes);
+        } catch (err) {
+            console.log(err);
         }
-
-        const newNotes = getSortedNotes(data, values.orderBy, values.ascOrDesc);
-        setNotes(newNotes);
 
         setMenuOpen(false);
         setSubmitting(false);

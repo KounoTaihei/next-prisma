@@ -8,9 +8,11 @@ export const BreadCrumbs = ({ links, current }: Props) => {
             breadcrumbs: {
                 backgroundColor: "#EFF6FF",
                 padding: "0.5em",
+                display: "flex",
+                alignItems: "center"
             },
             link: {
-                fontSize: "0.8em"
+                fontSize: "0.8em",
             },
             typography: {
                 fontSize: "0.8em"

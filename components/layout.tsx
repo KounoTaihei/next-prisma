@@ -36,6 +36,7 @@ const Layout = ({ children }: Props) => {
         <>
             <Head>
                 <title>Note App</title>
+                <meta charSet="utf-8"></meta>
             </Head>
             <Header />
             <main>{children}</main>

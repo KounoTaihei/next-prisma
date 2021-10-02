@@ -1,4 +1,4 @@
-import { Item, Note } from "@prisma/client";
+import { Note } from "@prisma/client";
 import { ItemWithHearts } from '../../types/item';
 import { GetStaticPaths, GetStaticProps } from "next";
 import { getFormattedDate } from "../../functions/get_formatted_date";
