@@ -1,10 +1,11 @@
 import { Note } from ".prisma/client";
 import { faExclamationCircle, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, IconButton } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, IconButton } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
+import { Loader } from "../loader";
 
 const apiUrl = '/api';
 
@@ -35,9 +36,6 @@ export const NoteDeleteModal = ({
                 margin: "0 5px",
                 fontSize: "1em"
             },
-            progress: {
-                margin: "30px"
-            },
             actions: {
                 justifyContent: "space-evenly"
             }
@@ -54,7 +52,6 @@ export const NoteDeleteModal = ({
         await fetch(`${apiUrl}/notes/${note.id}`, {
             method: 'DELETE'
         }).then(() => {
-            setSubmitting(false);
             router.push('/notes');
         })
         .catch(err => {
@@ -87,7 +84,9 @@ export const NoteDeleteModal = ({
         >
             {submitting ? (
                 <DialogContent>
-                    <CircularProgress className={classes.progress} />
+                    <div className="m-10">
+                        <Loader />
+                    </div>
                 </DialogContent>
             ) : (
                 <DialogContent>

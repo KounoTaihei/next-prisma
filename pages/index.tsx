@@ -1,10 +1,11 @@
 import type { NextPage } from 'next';
 import { useSession } from "next-auth/client";
-import { CircularProgress, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { PrismaClient } from '@prisma/client';
 import { useEffect } from 'react';
 import { useRouter } from 'next/dist/client/router';
 import { createStyles, makeStyles } from '@material-ui/styles';
+import { Loader } from '../components/loader';
 
 const Home: NextPage = () => {
   const [ session, loading ] = useSession();
@@ -32,9 +33,7 @@ const Home: NextPage = () => {
   return (
     <>
       <div className="text-center py-8">
-        <CircularProgress
-          color="primary"
-        />
+        <Loader />
         <Typography className={classes.typography}>ログイン情報を確認中...</Typography>
       </div>
     </>

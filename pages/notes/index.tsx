@@ -1,7 +1,7 @@
 import prisma from "../../lib/prisma";
 import { GetStaticProps } from "next";
 import Link from "next/link";
-import { Avatar, Button, CircularProgress, FormControl, FormControlLabel, IconButton, InputLabel, List, ListItem, ListItemAvatar, ListItemText, NativeSelect, Radio, RadioGroup, TextField } from "@material-ui/core";
+import { Avatar, Button, FormControl, FormControlLabel, IconButton, InputLabel, List, ListItem, ListItemAvatar, ListItemText, NativeSelect, Radio, RadioGroup, TextField } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Image from 'next/image';
 import { getFormattedDate } from "../../functions/get_formatted_date";
@@ -16,6 +16,7 @@ import { NoteWithUserAndItems } from "../../types/note";
 import { getSortedNotes } from "../../functions/get_sorted_notes";
 import styles from '../../styles/Note.module.scss';
 import { Formik } from "formik";
+import { Loader } from "../../components/loader";
 
 const Notes = (props: Props) => {
     const [ notes, setNotes ] = useState<NoteWithUserAndItems[]>(getSortedNotes(props.notes, "0", "0"));
@@ -78,9 +79,6 @@ const Notes = (props: Props) => {
         } catch (err) {
             console.log(err);
         }
-
-        setMenuOpen(false);
-        setSubmitting(false);
     }
 
     return (
@@ -189,7 +187,7 @@ const Notes = (props: Props) => {
             </div>
             {submitting && (
                 <div className="text-center py-8">
-                    <CircularProgress color="primary"/>
+                    <Loader />
                 </div>
             )}
             {!submitting && (

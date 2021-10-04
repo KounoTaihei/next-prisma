@@ -1,12 +1,13 @@
 import { Note } from ".prisma/client"
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, IconButton, TextField } from "@material-ui/core"
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, IconButton, TextField } from "@material-ui/core"
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import * as Yup from 'yup';
+import { Loader } from "../loader";
 
 const apiUrl = '/api/notes';
 
@@ -26,9 +27,6 @@ export const NoteUpdateModal = ({
                 alignItems: "center",
                 color: "#000",
                 margin: 0
-            },
-            progress: {
-                margin: "30px"
             },
             textField: {
                 width: "100%",
@@ -78,7 +76,9 @@ export const NoteUpdateModal = ({
         >
             {submitting ? (
                 <DialogContent>
-                    <CircularProgress className={classes.progress} />
+                    <div className="m-10">
+                        <Loader />
+                    </div>
                 </DialogContent>
             ) : (
                 <DialogContent>

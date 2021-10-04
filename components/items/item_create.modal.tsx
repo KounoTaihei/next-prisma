@@ -1,13 +1,14 @@
 import { Note } from ".prisma/client";
 import { faEdit, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, IconButton, TextField } from "@material-ui/core"
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, IconButton, TextField } from "@material-ui/core"
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import * as Yup from 'yup';
 import { getFormattedDate } from "../../functions/get_formatted_date";
+import { Loader } from "../loader";
 
 const apiUrl = '/api/items';
 
@@ -24,9 +25,6 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                 alignItems: "center",
                 color: "#000",
                 margin: 0
-            },
-            progress: {
-                margin: "30px"
             },
             textField: {
                 width: "100%",
@@ -87,7 +85,9 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
         >
             {submitting ? (
                 <DialogContent>
-                    <CircularProgress className={classes.progress} />
+                    <div className="m-10">
+                        <Loader />
+                    </div>
                 </DialogContent>
             ) : (
                 <DialogContent>

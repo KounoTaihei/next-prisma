@@ -6,6 +6,7 @@ import { Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import * as Yup from 'yup';
+import { Loader } from "../loader";
 
 const apiUrl = '/api/notes';
 
@@ -61,7 +62,6 @@ export const NoteCreateModal = ({
             body: JSON.stringify(values)
         })
         .then((res) => {
-            setSubmitting(false);
             res.json().then(r => {
                 router.push(`/items/${r.id}`)
             })
@@ -79,7 +79,9 @@ export const NoteCreateModal = ({
         >
             {submitting ? (
                 <DialogContent>
-                    <CircularProgress className={classes.progress} />
+                    <div className="m-10">
+                    <Loader />
+                    </div>
                 </DialogContent>
             ) : (
                 <DialogContent>

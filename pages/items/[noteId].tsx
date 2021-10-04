@@ -5,7 +5,7 @@ import { getFormattedDate } from "../../functions/get_formatted_date";
 import prisma from "../../lib/prisma";
 import Image from "next/image";
 import imageurl from "../../public/20141126_unsplash.webp";
-import { Avatar, CardActions, CardContent, CardHeader, CircularProgress, IconButton, ImageList, ImageListItem, List, ListItem, ListItemAvatar, ListItemText, makeStyles, Tab, Tabs } from "@material-ui/core";
+import { Avatar, CardActions, CardContent, CardHeader, IconButton, ImageList, ImageListItem, List, ListItem, ListItemAvatar, ListItemText, makeStyles, Tab, Tabs } from "@material-ui/core";
 import { Timeline, TimelineContent, TimelineItem } from '@material-ui/lab';
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/client";
@@ -20,6 +20,7 @@ import { NoteWithUser } from "../../types/note";
 import { revalidateTime } from "../../lib/revalidate_time";
 import { getHearted } from "../../functions/get_hearted";
 import { getActiveHeartId } from '../../functions/get_active_heart_id';
+import { Loader } from "../../components/loader";
 
 const FindItemsByNoteId = (props: Props) => {
     const [ note, setNote ] = useState<NoteWithUser>(props.note);
@@ -340,7 +341,7 @@ const FindItemsByNoteId = (props: Props) => {
             {/* 読み込み中の表示 */}
             {processing && (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-full h-full bg-black z-50 opacity-60">
-                    <CircularProgress />
+                    <Loader />
                 </div>
             )}
         </>

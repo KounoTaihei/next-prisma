@@ -1,11 +1,12 @@
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, CircularProgress, Typography } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useSession, signIn } from "next-auth/client";
 import { useRouter } from "next/dist/client/router";
 import Link from 'next/link';
 import { useEffect } from "react";
+import { Loader } from "../components/loader";
 
 const Login = () => {
     const [ session, loading ] = useSession();
@@ -39,9 +40,7 @@ const Login = () => {
         <>
             {loading && (
                 <div className="text-center py-8">
-                    <CircularProgress
-                    color="primary"
-                    />
+                    <Loader />
                     <Typography className={classes.typography}>ログイン情報を確認中...</Typography>
                 </div>
             )}
