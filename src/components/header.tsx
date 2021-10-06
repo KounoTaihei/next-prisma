@@ -3,7 +3,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { useSession } from 'next-auth/client';
 import Link from 'next/link';
 import Image from 'next/image';
-import humanImage from '../public/human.svg';
+import humanImage from '../../public/human.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';

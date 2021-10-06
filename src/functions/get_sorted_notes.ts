@@ -1,4 +1,4 @@
-import { NoteWithItems, NoteWithUserAndItems } from "../types/note";
+import { NoteWithItems, NoteWithUserAndItems } from "../../types/note";
 import { getLatestDate } from "./get_latest_date";
 
 /** ------ 

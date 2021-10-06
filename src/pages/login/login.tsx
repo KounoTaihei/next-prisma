@@ -6,7 +6,7 @@ import { useSession, signIn } from "next-auth/client";
 import { useRouter } from "next/dist/client/router";
 import Link from 'next/link';
 import { useEffect } from "react";
-import { Loader } from "../components/loader";
+import { Loader } from "../../components/loader";
 
 const Login = () => {
     const [ session, loading ] = useSession();

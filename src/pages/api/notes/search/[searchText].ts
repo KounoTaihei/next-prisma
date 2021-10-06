@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { NoteWithUserAndItems } from "../../../../types/note";
+import { NoteWithUserAndItems } from "../../../../../types/note";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const method = req.method;

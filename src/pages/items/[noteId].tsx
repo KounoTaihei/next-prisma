@@ -1,5 +1,5 @@
 import { Note } from "@prisma/client";
-import { ItemWithHearts } from '../../types/item';
+import { ItemWithHearts } from '../../../types/item';
 import { GetStaticPaths, GetStaticProps } from "next";
 import { getFormattedDate } from "../../functions/get_formatted_date";
 import prisma from "../../lib/prisma";
@@ -16,7 +16,7 @@ import { BreadCrumbs } from "../../components/breadcrumbs";
 import { ItemCreateModal } from "../../components/items/item_create.modal";
 import { NoteUpdateModal } from "../../components/notes/note_update.modal";
 import { NoteDeleteModal } from "../../components/notes/note_delete.modal";
-import { NoteWithUser } from "../../types/note";
+import { NoteWithUser } from "../../../types/note";
 import { revalidateTime } from "../../lib/revalidate_time";
 import { getHearted } from "../../functions/get_hearted";
 import { getActiveHeartId } from '../../functions/get_active_heart_id';

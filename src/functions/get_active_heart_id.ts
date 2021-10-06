@@ -1,4 +1,4 @@
-import { ItemWithHearts } from "../types/item";
+import { ItemWithHearts } from "../../types/item";
 
 export const getActiveHeartId = (item: ItemWithHearts, userId: string): string => {
     if(!item.hearts) {

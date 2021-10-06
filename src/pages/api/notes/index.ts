@@ -2,7 +2,7 @@ import { Note, Prisma } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
 import prisma from '../../../lib/prisma';
-import { NoteWithUserAndItems } from '../../../types/note';
+import { NoteWithUserAndItems } from '../../../../types/note';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Note[] | Note>) {
     const method = req.method;

@@ -10,7 +10,7 @@ import { getLatestDate } from "../../functions/get_latest_date";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { revalidateTime } from "../../lib/revalidate_time";
 import { useState } from "react";
-import { NoteWithItems } from "../../types/note";
+import { NoteWithItems } from "../../../types/note";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { NoteCreateModal } from "../../components/notes/note_create.modal";

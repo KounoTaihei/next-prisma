@@ -12,7 +12,7 @@ import { useState } from "react";
 import { NoteCreateModal } from '../../components/notes/note_create.modal';
 import { BreadCrumbs } from "../../components/breadcrumbs";
 import { revalidateTime } from "../../lib/revalidate_time";
-import { NoteWithUserAndItems } from "../../types/note";
+import { NoteWithUserAndItems } from "../../../types/note";
 import { getSortedNotes } from "../../functions/get_sorted_notes";
 import styles from '../../styles/Note.module.scss';
 import { Formik } from "formik";
