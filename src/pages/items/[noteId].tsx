@@ -57,9 +57,23 @@ const FindItemsByNoteId = (props: Props) => {
 
     /** Heartを作成 */
     const createHeart = async (itemId: string) => {
+        if(!session?.user) {
+            return;
+        }
+
         setProcessing(true);
         try {
-            await fetch(`/api/hearts/create/${itemId}`).then(() => {getItems()});
+            await fetch('/api/hearts/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    itemId,
+                    userId: session.user.id
+                })
+            })
+            .then(() => { getItems() });
         } catch (err) {
             console.log(err);
         }
@@ -67,10 +81,24 @@ const FindItemsByNoteId = (props: Props) => {
     }
 
     /** Heartを削除 */
-    const deleteHeart = async (heartId: string) => {
+    const deleteHeart = async (itemId: string) => {
+        if(!session?.user) {
+            return;
+        }
+
         setProcessing(true);
         try {
-            await fetch(`/api/hearts/delete/${heartId}`).then(() => {getItems()});
+            await fetch('/api/hearts/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    itemId,
+                    userId: session.user.id
+                })
+            })
+            .then(() => { getItems() });
         } catch (err) {
             console.log(err);
         }
