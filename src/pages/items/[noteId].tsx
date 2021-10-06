@@ -19,7 +19,6 @@ import { NoteDeleteModal } from "../../components/notes/note_delete.modal";
 import { NoteWithUser } from "../../../types/note";
 import { revalidateTime } from "../../lib/revalidate_time";
 import { getHearted } from "../../functions/get_hearted";
-import { getActiveHeartId } from '../../functions/get_active_heart_id';
 import { Loader } from "../../components/loader";
 
 const FindItemsByNoteId = (props: Props) => {
