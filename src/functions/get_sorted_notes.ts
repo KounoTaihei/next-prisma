@@ -7,7 +7,7 @@ import { getLatestDate } from "./get_latest_date";
  *  orderBy   0 => アイテムのcreatedAtで並び替え
  *            1 => ノートのcreatedAt
  *            2 => アイテムの数
- *  ascOrDest 0 => 降順
+ *  ascOrDesc 0 => 降順
  *            1 => 昇順
  *  ------ */
 

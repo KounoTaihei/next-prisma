@@ -4,7 +4,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { getFormattedDate } from "../../functions/get_formatted_date";
 import prisma from "../../lib/prisma";
 import Image from "next/image";
-import imageurl from "../../public/20141126_unsplash.webp";
+import imageurl from "../../../public/20141126_unsplash.webp"
 import { Avatar, CardActions, CardContent, CardHeader, IconButton, ImageList, ImageListItem, List, ListItem, ListItemAvatar, ListItemText, makeStyles, Tab, Tabs } from "@material-ui/core";
 import { Timeline, TimelineContent, TimelineItem } from '@material-ui/lab';
 import { useEffect, useState } from "react";
@@ -36,10 +36,9 @@ const FindItemsByNoteId = (props: Props) => {
     /** ノートを再取得 */
     const getNote = async () => {
         try {
-            const data: NoteWithUser | null = await fetch(`/api/notes/${note.id}`).then(res => res.json());
-            if(data) {
-                setNote(data);
-            }
+            const res = await fetch(`/api/notes/${note.id}`);
+            const data: NoteWithUser = await res.json();
+            setNote(data);
         } catch (err) {
             console.log(err);
         }
@@ -48,10 +47,9 @@ const FindItemsByNoteId = (props: Props) => {
     /** アイテム一覧を再取得 */
     const getItems = async () => {
         try {
-            const data: ItemWithHearts[] | null = await fetch(`/api/items/${note.id}`).then(res => res.json());
-            if(data) {
-                setItems(data);
-            }
+            const res = await fetch(`/api/items/${note.id}`)
+            const data: ItemWithHearts[] = await res.json();
+            setItems(data);
         } catch (err) {
             console.log(err);
         }

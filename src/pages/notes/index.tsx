@@ -19,10 +19,9 @@ import { Formik } from "formik";
 import { Loader } from "../../components/loader";
 
 const Notes = (props: Props) => {
-    const [ notes, setNotes ] = useState<NoteWithUserAndItems[]>(getSortedNotes(props.notes, "0", "0"));
+    const [ notes, setNotes ] = useState<NoteWithUserAndItems[]>(props.notes);
     const [ modalOpen, setModalOpen ] = useState<boolean>(false);
     const [ submitting, setSubmitting ] = useState<boolean>(false);
-    
     const [ menuOpen, setMenuOpen ] = useState<boolean>(false);
 
     const useStyles = makeStyles(() =>
@@ -57,28 +56,19 @@ const Notes = (props: Props) => {
     const classes = useStyles();
 
     const initialValues: FormValues = {
-        searchText: "",
+        // searchText: "",
         orderBy: "0",
         ascOrDesc: "0"
     }
 
-    const submit = async (values: FormValues) => {
-        setSubmitting(true);
+    const submit = (values: FormValues) => {
         try {
-            let data: NoteWithUserAndItems[];
-            if(values.searchText) {
-                data = await fetch(`/api/notes/search/${values.searchText}`)
-                .then(res => res.json());
-            } else {
-                data = await fetch('/api/notes')
-                .then(res => res.json());
-            }
-            
-            const newNotes = getSortedNotes(data, values.orderBy, values.ascOrDesc);
+            const newNotes: NoteWithUserAndItems[] = getSortedNotes(notes, values.orderBy, values.ascOrDesc);
             setNotes(newNotes);
         } catch (err) {
             console.log(err);
         }
+        setMenuOpen(false);
     }
 
     return (
@@ -114,7 +104,6 @@ const Notes = (props: Props) => {
                             handleChange,
                             handleBlur,
                             handleSubmit,
-                            isSubmitting
                         }) => (
                             <form onSubmit={handleSubmit} className={menuOpen ? `${styles.menu} ${styles.active}` : styles.menu}>
                                 <div className="w-full">
@@ -164,7 +153,7 @@ const Notes = (props: Props) => {
                                             />
                                         </RadioGroup>
                                     </FormControl>
-                                    <FormControl fullWidth variant="standard" className={classes.formControl}>
+                                    {/* <FormControl fullWidth variant="standard" className={classes.formControl}>
                                         <TextField
                                             label="ノートを検索"
                                             name="searchText"
@@ -173,10 +162,10 @@ const Notes = (props: Props) => {
                                             value={values.searchText}
                                             className={classes.searchInput}
                                         />
-                                    </FormControl>
+                                    </FormControl> */}
                                 </div>
                                 <div className={submitting ? `${styles.submitbtn} ${styles.active}` : styles.submitbtn}>
-                                    <IconButton className={classes.icon} type="submit" disabled={isSubmitting}>
+                                    <IconButton className={classes.icon} type="submit" disabled={submitting}>
                                         <FontAwesomeIcon icon={faSyncAlt} />
                                     </IconButton>
                                 </div>
@@ -255,7 +244,7 @@ interface Props {
 }
 
 interface FormValues {
-    searchText: string
+    // searchText: string
     orderBy: string
     ascOrDesc: string
 }
