@@ -215,7 +215,7 @@ const FindItemsByNoteId = (props: Props) => {
                 <div className="flex justify-between">
                     <CardActions className={item.hearts ? classes.flexActions : ""}>
                         {(session && getHearted(item, session.user.id)) && (
-                            <IconButton className={classes.activeHeart} onClick={() => deleteHeart(getActiveHeartId(item, session.user.id))}>
+                            <IconButton className={classes.activeHeart} onClick={() => deleteHeart(item.id)}>
                                 <FontAwesomeIcon icon={faHeart} />
                             </IconButton>
                         )}

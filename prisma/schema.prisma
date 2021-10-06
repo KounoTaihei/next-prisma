@@ -36,11 +36,11 @@ model Item {
 }
 
 model Heart {
-  id String @id @default(cuid())
   user User @relation(fields: [userId], references: [id])
   userId String
   item Item @relation(fields: [itemId], references: [id])
   itemId String
+  @@id([userId, itemId])
 }
 
 // 以下認証用

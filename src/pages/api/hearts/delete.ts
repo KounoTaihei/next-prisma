@@ -13,13 +13,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                 return;
             }
 
-            const target = await prisma.heart.findUnique({
+            const data = await prisma.heart.delete({
                 where: {
-                    
+                    userId_itemId: {
+                        userId, itemId
+                    }
                 }
             })
+            .then(res => JSON.parse(JSON.stringify(res)));
 
-            // res.status(200).json(data);
+            res.status(200).json(data);
             break;
         }
         default: {
