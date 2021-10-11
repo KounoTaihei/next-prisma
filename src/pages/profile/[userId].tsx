@@ -2,19 +2,19 @@ import { User } from ".prisma/client";
 import { Avatar, Button, IconButton, List, ListItem, ListItemText, Typography } from "@material-ui/core";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { signOut, useSession } from "next-auth/client";
-import prisma from "../../lib/prisma";
+import prisma from "../../../lib/prisma";
 import Image from 'next/image';
 import Link from 'next/link';
-import { getFormattedDate } from "../../functions/get_formatted_date";
-import { getLatestDate } from "../../functions/get_latest_date";
+import { getFormattedDate } from "../../../functions/get_formatted_date";
+import { getLatestDate } from "../../../functions/get_latest_date";
 import { createStyles, makeStyles } from "@material-ui/styles";
-import { revalidateTime } from "../../lib/revalidate_time";
+import { revalidateTime } from "../../../lib/revalidate_time";
 import { useState } from "react";
 import { NoteWithItems } from "../../../types/note";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { NoteCreateModal } from "../../components/notes/note_create.modal";
-import { getSortedNotes } from "../../functions/get_sorted_notes";
+import { getSortedNotes } from "../../../functions/get_sorted_notes";
 
 const Profile = (props: Props) => {
     const [ user, setUser ] = useState<User>(props.user);

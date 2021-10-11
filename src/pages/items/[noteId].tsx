@@ -1,8 +1,8 @@
 import { Note } from "@prisma/client";
 import { ItemWithHearts } from '../../../types/item';
 import { GetStaticPaths, GetStaticProps } from "next";
-import { getFormattedDate } from "../../functions/get_formatted_date";
-import prisma from "../../lib/prisma";
+import { getFormattedDate } from "../../../functions/get_formatted_date";
+import prisma from "../../../lib/prisma";
 import Image from "next/image";
 import imageurl from "../../../public/20141126_unsplash.webp"
 import { Avatar, CardActions, CardContent, CardHeader, IconButton, ImageList, ImageListItem, List, ListItem, ListItemAvatar, ListItemText, makeStyles, Tab, Tabs } from "@material-ui/core";
@@ -17,8 +17,8 @@ import { ItemCreateModal } from "../../components/items/item_create.modal";
 import { NoteUpdateModal } from "../../components/notes/note_update.modal";
 import { NoteDeleteModal } from "../../components/notes/note_delete.modal";
 import { NoteWithUser } from "../../../types/note";
-import { revalidateTime } from "../../lib/revalidate_time";
-import { getHearted } from "../../functions/get_hearted";
+import { revalidateTime } from "../../../lib/revalidate_time";
+import { getHearted } from "../../../functions/get_hearted";
 import { Loader } from "../../components/loader";
 
 const FindItemsByNoteId = (props: Props) => {

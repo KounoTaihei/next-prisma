@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { NoteWithItems } from "../../../../../types/note";
+import prisma from "../../../../../lib/prisma";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const method = req.method;

@@ -7,8 +7,6 @@ import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Loader } from "../loader";
 
-const apiUrl = '/api';
-
 export const NoteDeleteModal = ({
     note,
     itemsLength,
@@ -49,7 +47,7 @@ export const NoteDeleteModal = ({
 
     const deleteNote = async () => {
         setSubmitting(true);
-        await fetch(`${apiUrl}/notes/${note.id}`, {
+        await fetch(`/api/notes/${note.id}`, {
             method: 'DELETE'
         }).then(() => {
             router.push('/notes');
@@ -65,7 +63,7 @@ export const NoteDeleteModal = ({
             return;
         }
         setSubmitting(true);
-        await fetch(`${apiUrl}/items/all/${note.id}`, {
+        await fetch(`/api/items/all/${note.id}`, {
             method: 'DELETE'
         }).then(() => {
             setSubmitting(false);

@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { animateScroll as scroll } from 'react-scroll';
-import styles from '../styles/Layout.module.scss';
+import styles from './Layout.module.scss';
 
 const Layout = ({ children }: Props) => {
     const [ scrolled, setScrolled ] = useState<boolean>(false);

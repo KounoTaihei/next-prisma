@@ -1,6 +1,6 @@
 import { Item, Prisma } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../lib/prisma';
+import prisma from '../../../../lib/prisma';
 import { ItemWithHearts } from '../../../../types/item';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Item | Item[]>) {
