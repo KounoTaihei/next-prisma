@@ -14,7 +14,7 @@ import { BreadCrumbs } from "../../components/breadcrumbs";
 import { revalidateTime } from "../../../lib/revalidate_time";
 import { NoteWithUserAndItems } from "../../../types/note";
 import { getSortedNotes } from "../../../functions/get_sorted_notes";
-import styles from '../../styles/Note.module.scss';
+import styles from './Note.module.scss';
 import { Formik } from "formik";
 import { Loader } from "../../components/loader";
 
