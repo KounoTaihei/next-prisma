@@ -1,4 +1,4 @@
-import { ItemWithHearts } from "../../types/item";
+import { ItemWithHearts } from "../types/item";
 
 export const getHearted = (item: ItemWithHearts, userId: string): boolean => {
     if(!item.hearts) {

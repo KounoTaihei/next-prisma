@@ -29,11 +29,16 @@ const Header = () => {
             },
             menu: {
                 width: "65vw",
-                height: "100%"
+                height: "100%",
+                backgroundColor: "rgba(0, 50, 0, 0.1)"
             },
             menuItem: {
                 padding: "10px",
                 width: "auto"
+            },
+            menuButton: {
+                margin: "auto",
+                fontSize: "1.2rem"
             },
             icon: {
                 fontSize: "2rem"
@@ -57,6 +62,7 @@ const Header = () => {
                         >
                             <Button
                                 startIcon={<FontAwesomeIcon icon={faBookOpen} />}
+                                className={classes.menuButton}
                             >
                                 ノート一覧
                             </Button>
