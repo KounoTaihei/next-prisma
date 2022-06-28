@@ -9,6 +9,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import * as Yup from 'yup';
 import { getFormattedDate } from "../../../functions/get_formatted_date";
 import { Loader } from "../loader";
+import { postImage } from "../../pages/api/upload";
 
 const apiUrl = '/api/items';
 
@@ -16,6 +17,25 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
     const [ forRender, setForRender ] = useState<boolean>(false);
     const router = useRouter();
     const [ submitting, setSubmitting ] = useState<boolean>(false);
+
+    const [ image, setImage ] = useState<File | null>(null);
+    const [ createObjectUrl, setCreateObjectUrl ] = useState<string | null>(null);
+
+    /** ファイルのプレビュー用 */
+    const uploadToClient = (event: any) => {
+        if(event.target.files && event.target.files[0]) {
+            const file = event.target.files[0];
+
+            setImage(file);
+            setCreateObjectUrl(URL.createObjectURL(file));
+        }
+    }
+
+    /** サーバーサイドにアップロード */
+    const uploadToServer = async() => {
+        const result = await postImage(image);
+        console.log(result);
+    }
 
     const useStyles = makeStyles(() =>
         createStyles({
@@ -68,6 +88,7 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
             },
             body: JSON.stringify(values)
         })
+        await uploadToServer()
         .then((res) => {
             setSubmitting(false);
             setModalOpen(false);
@@ -158,7 +179,8 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                                         </IconButton>
                                     </div>
                                     <div className="text-center flex items-center">
-                                        {/* ここに画像のinputを配置する */}
+                                        <img src={createObjectUrl!} />
+                                        <input type="file" onChange={uploadToClient} />
                                     </div>
                                 </div>
                                 <div>
