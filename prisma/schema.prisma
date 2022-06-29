@@ -24,10 +24,7 @@ model Item {
   id String @id @default(cuid())
   title String?
   body String
-  image_1 String?
-  image_2 String?
-  image_3 String?
-  image_4 String?
+  image String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @map(name: "updatedAt")
   note Note @relation(fields: [noteId], references: [id])

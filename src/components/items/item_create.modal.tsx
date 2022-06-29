@@ -34,7 +34,7 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
     /** サーバーサイドにアップロード */
     const uploadToServer = async() => {
         const result = await postImage(image);
-        console.log(result);
+        return await result;
     }
 
     const useStyles = makeStyles(() =>
@@ -63,7 +63,8 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
 
     const initialValues: FormValues= {
         title: "",
-        body: ""
+        body: "",
+        image: ""
     }
 
     const validationSchema = Yup.object().shape({
@@ -77,14 +78,16 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
 
     const submit = async (values: FormValues) => {
         setSubmitting(true);
-        await fetch(`${apiUrl}/${note.id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(values)
+        await uploadToServer().then(res => {
+            values.image = res!;
+            fetch(`${apiUrl}/${note.id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(values)
+            })
         })
-        await uploadToServer()
         .then((res) => {
             setSubmitting(false);
             setModalOpen(false);
@@ -209,6 +212,7 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
 interface FormValues {
     title : string
     body : string
+    image: string | undefined
 }
 
 interface Props {

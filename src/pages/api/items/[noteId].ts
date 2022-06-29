@@ -32,7 +32,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                 data: {
                     title: body.title,
                     body: body.body,
-                    noteId: noteId
+                    noteId: noteId,
+                    image: body.image
                 }
             });
             res.status(200).json(item);

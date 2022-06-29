@@ -118,7 +118,7 @@ const Notes = (props: Props) => {
                                             onBlur={handleBlur}
                                             value={values.orderBy}
                                         >
-                                            <option value={0}>ノート内のアイテムの作成日</option>
+                                            <option value={0}>投稿日</option>
                                             <option value={1}>ノートの作成日</option>
                                             <option value={2}>ノート内のアイテムの数</option>
                                         </NativeSelect>
@@ -181,7 +181,7 @@ const Notes = (props: Props) => {
             )}
             {!submitting && (
                 <List>
-                    {notes.map(note =>
+                    {notes.length ? notes.map(note =>
                         <Link href={`/items/${note.id}`} key={note.id} passHref>
                             <Button className={classes.button}>
                                 <ListItem key={note.id}>
@@ -211,7 +211,7 @@ const Notes = (props: Props) => {
                                 </ListItem>
                             </Button>
                         </Link>
-                    )}
+                    ) : ""}
                 </List>
             )}
             <NoteCreateModal
