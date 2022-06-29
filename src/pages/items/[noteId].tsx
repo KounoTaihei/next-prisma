@@ -138,7 +138,8 @@ const FindItemsByNoteId = (props: Props) => {
             }
         },
         cardContent: {
-            whiteSpace: "pre-wrap"
+            whiteSpace: "pre-wrap",
+            textAlign: "center"
         },
         imageListWrapper: {
             display: 'flex',
@@ -192,18 +193,15 @@ const FindItemsByNoteId = (props: Props) => {
                 <CardHeader
                     subheader={
                         <>
-                            <div className="text-center ::after, border-b-2 border-green-100">
-                                <span className="text-black">{item.title}</span><br></br>
-                                {getFormattedDate(item.createdAt)}
+                            <div className="text-center ::after">
+                                <span className="text-black">{item.title} ({getFormattedDate(item.createdAt)})</span>
                             </div>
                         </>
                     }
                 />
-                {item.image && (
-                    <div className={classes.imageListWrapper}>
-                        <img src={item.image} />
-                    </div>
-                )}
+                <div className={classes.imageListWrapper}>
+                    <img src={item.image!} />
+                </div>
                 <CardContent className={classes.cardContent}>
                     {item.body}
                 </CardContent>

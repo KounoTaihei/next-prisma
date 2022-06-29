@@ -120,7 +120,7 @@ const Notes = (props: Props) => {
                                         >
                                             <option value={0}>投稿日</option>
                                             <option value={1}>ノートの作成日</option>
-                                            <option value={2}>ノート内のアイテムの数</option>
+                                            <option value={2}>投稿数</option>
                                         </NativeSelect>
                                     </FormControl>
                                     <FormControl className={classes.formControl}>

@@ -33,8 +33,12 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
 
     /** サーバーサイドにアップロード */
     const uploadToServer = async() => {
-        const result = await postImage(image);
-        return await result;
+        if(image) {
+            const result = await postImage(image);
+            return await result;
+        } else {
+            alert('画像を１枚以上追加してください。')
+        }
     }
 
     const useStyles = makeStyles(() =>
