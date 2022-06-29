@@ -12,7 +12,7 @@ const firebaseConfig = {
 
 let app;
 
-if(getApps().length) {
+if(!getApps().length) {
     app = initializeApp(firebaseConfig);
 }
 export const storage = getStorage(app);

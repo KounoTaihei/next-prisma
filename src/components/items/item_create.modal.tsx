@@ -63,11 +63,7 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
 
     const initialValues: FormValues= {
         title: "",
-        body: "",
-        image_1: null,
-        image_2: null,
-        image_3: null,
-        image_4: null
+        body: ""
     }
 
     const validationSchema = Yup.object().shape({
@@ -178,9 +174,9 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                                             <FontAwesomeIcon icon={faEdit} />
                                         </IconButton>
                                     </div>
-                                    <div className="text-center flex items-center">
+                                    <div className="text-center items-center">
+                                        <input type="file" onChange={uploadToClient} className="mb-1" />
                                         <img src={createObjectUrl!} />
-                                        <input type="file" onChange={uploadToClient} />
                                     </div>
                                 </div>
                                 <div>
@@ -189,6 +185,8 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                                             onClick={() => {
                                                 values.title = "",
                                                 values.body = "",
+                                                setImage(null);
+                                                setCreateObjectUrl(null);
                                                 setForRender(!forRender);
                                             }}
                                         >
@@ -211,10 +209,6 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
 interface FormValues {
     title : string
     body : string
-    image_1: string | null
-    image_2: string | null
-    image_3: string | null
-    image_4: string | null
 }
 
 interface Props {
