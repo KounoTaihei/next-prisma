@@ -116,7 +116,7 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
             ) : (
                 <DialogContent>
                     <DialogContentText className={classes.dialogTitle}>
-                        {note.title}のアイテムを追加
+                        {note.title} の投稿を追加
                         <IconButton onClick={handleClose}>
                             <FontAwesomeIcon icon={faTimes} />
                         </IconButton>
@@ -149,14 +149,15 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                                             helperText={errors.title && touched.title ? "入力必須です" : ""}
                                             className={classes.textField}
                                         />
-                                        <IconButton
+                                        <button
                                             onClick={() => {
                                                 values.title = `${getFormattedDate(new Date())}の投稿`;
                                                 setForRender(!forRender);
                                             }}
+                                            className="border-2 px-2 rounded-xl text-sm"
                                         >
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </IconButton>
+                                            デフォルト文章
+                                        </button>
                                     </div>
                                     <div className="text-right">
                                         <TextField
@@ -172,17 +173,18 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                                             helperText={errors.body && touched.body ? "入力必須です" : ""}
                                             className={classes.textField}
                                         />
-                                        <IconButton
+                                        <button
                                             onClick={() => {
                                                 values.body = "入力が面倒な時に使う";
                                                 setForRender(!forRender);
                                             }}
+                                            className="border-2 px-2 rounded-xl text-sm"
                                         >
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </IconButton>
+                                            デフォルト文章
+                                        </button>
                                     </div>
-                                    <div className="text-center items-center">
-                                        <input type="file" onChange={uploadToClient} className="mb-1" />
+                                    <div className="text-center items-center my-4">
+                                        <input type="file" onChange={uploadToClient} className="my-2" />
                                         <img src={createObjectUrl!} />
                                     </div>
                                 </div>
