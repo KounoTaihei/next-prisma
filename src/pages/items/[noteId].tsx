@@ -237,9 +237,9 @@ const FindItemsByNoteId = (props: Props) => {
                     <CardActions>
                         {session?.user.id === note.userId && (
                             <>
-                                <IconButton className={classes.icon}>
+                                {/* <IconButton className={classes.icon}>
                                     <FontAwesomeIcon icon={faPen} />
-                                </IconButton>
+                                </IconButton> */}
                                 <IconButton className={classes.icon} onClick={() => setItemDeleteModalOpen(true)}>
                                     <FontAwesomeIcon icon={faTrash} />
                                 </IconButton>
