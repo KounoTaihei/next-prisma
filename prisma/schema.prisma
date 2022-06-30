@@ -22,9 +22,9 @@ model Note {
 
 model Item {
   id String @id @default(cuid())
-  title String?
-  body String
-  image String?
+  title String
+  body String?
+  image String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @map(name: "updatedAt")
   note Note @relation(fields: [noteId], references: [id])

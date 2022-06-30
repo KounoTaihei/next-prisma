@@ -37,7 +37,8 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
             const result = await postImage(image);
             return await result;
         } else {
-            alert('画像を１枚以上追加してください。')
+            alert('画像を１枚以上追加してください。');
+            return null
         }
     }
 
@@ -72,8 +73,7 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
     }
 
     const validationSchema = Yup.object().shape({
-        title: Yup.string().max(20, '20文字以内で入力してください').required('入力必須です'),
-        body: Yup.string().max(200, '200文字以内で入力してください').required('入力必須です')
+        title: Yup.string().max(20, '20文字以内で入力してください').required('入力必須です')
     });
 
     const handleClose = () => {
@@ -149,7 +149,7 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                                             helperText={errors.title && touched.title ? "入力必須です" : ""}
                                             className={classes.textField}
                                         />
-                                        <button
+                                        <Button
                                             onClick={() => {
                                                 values.title = `${getFormattedDate(new Date())}の投稿`;
                                                 setForRender(!forRender);
@@ -157,31 +157,21 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
                                             className="border-2 px-2 rounded-xl text-sm"
                                         >
                                             デフォルト文章
-                                        </button>
+                                        </Button>
                                     </div>
                                     <div className="text-right">
                                         <TextField
                                             id="standard-multiline-static"
                                             label="本文"
+                                            placeholder="未入力可"
                                             name="body"
                                             multiline
                                             rows={4}
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                             value={values.body}
-                                            error={errors.body && touched.body ? true : false}
-                                            helperText={errors.body && touched.body ? "入力必須です" : ""}
                                             className={classes.textField}
                                         />
-                                        <button
-                                            onClick={() => {
-                                                values.body = "入力が面倒な時に使う";
-                                                setForRender(!forRender);
-                                            }}
-                                            className="border-2 px-2 rounded-xl text-sm"
-                                        >
-                                            デフォルト文章
-                                        </button>
                                     </div>
                                     <div className="text-center items-center my-4">
                                         <input type="file" onChange={uploadToClient} className="my-2" />
@@ -216,9 +206,9 @@ export const ItemCreateModal = ({ note, modalOpen, setModalOpen }: Props) => {
 }
 
 interface FormValues {
-    title : string
-    body : string
-    image: string | undefined
+    title: String
+    body: string | null
+    image: string
 }
 
 interface Props {
