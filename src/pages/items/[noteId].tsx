@@ -20,6 +20,7 @@ import { revalidateTime } from "../../../lib/revalidate_time";
 import { getHearted } from "../../../functions/get_hearted";
 import { Loader } from "../../components/loader";
 import { getDownloadURL } from "firebase/storage";
+import { ItemDeleteModal } from "../../components/items/item_delete.modal";
 
 const FindItemsByNoteId = (props: Props) => {
     const [ note, setNote ] = useState<NoteWithUser>(props.note);
@@ -31,6 +32,7 @@ const FindItemsByNoteId = (props: Props) => {
     const [ itemCreateModalOpen, setItemCreateModalOpen ] = useState<boolean>(false);
     const [ noteUpdateModalOpen, setNoteUpdateModalOpen ] = useState<boolean>(false);
     const [ noteDeleteModalOpen, setNoteDeleteModalOpen ] = useState<boolean>(false);
+    const [ itemDeleteModalOpen, setItemDeleteModalOpen ] = useState<boolean>(false);
 
     /** ノートを再取得 */
     const getNote = async () => {
@@ -116,6 +118,12 @@ const FindItemsByNoteId = (props: Props) => {
             getItems();
         }
     },[noteDeleteModalOpen])
+
+    useEffect(() => {
+        if((session && session.user.id === note.user.id) && !noteDeleteModalOpen) {
+            getItems();
+        }
+    },[itemDeleteModalOpen])
 
     useEffect(() => {
         if((session && session.user.id === note.user.id) && !noteUpdateModalOpen) {
@@ -232,9 +240,14 @@ const FindItemsByNoteId = (props: Props) => {
                                 <IconButton className={classes.icon}>
                                     <FontAwesomeIcon icon={faPen} />
                                 </IconButton>
-                                <IconButton className={classes.icon}>
+                                <IconButton className={classes.icon} onClick={() => setItemDeleteModalOpen(true)}>
                                     <FontAwesomeIcon icon={faTrash} />
                                 </IconButton>
+                                <ItemDeleteModal
+                                    item={item}
+                                    modalOpen={itemDeleteModalOpen}
+                                    setModalOpen={setItemDeleteModalOpen}
+                                />
                             </>
                         )}
                     </CardActions>
@@ -251,15 +264,6 @@ const FindItemsByNoteId = (props: Props) => {
         const height: number = document.getElementById(id)?.getBoundingClientRect().top!;
         Scroll.scrollTo(height + window.pageYOffset - tabsHeight);
     }
-    /** --- */
-
-    /** 画像リスト */
-    const paths: string[] = [
-        "20141126_unsplash.webp",
-        "20141126_unsplash.webp",
-        "20141126_unsplash.webp",
-        "20141126_unsplash.webp",
-    ];
     /** --- */
 
     return (
@@ -298,6 +302,7 @@ const FindItemsByNoteId = (props: Props) => {
                         <IconButton className={classes.topIcon} onClick={() => setItemCreateModalOpen(true)}>
                             <FontAwesomeIcon icon={faPlus} />
                         </IconButton>
+                        {/* ノート関係のモーダル */}
                         <ItemCreateModal
                             note={note}
                             modalOpen={itemCreateModalOpen}
@@ -355,7 +360,7 @@ const FindItemsByNoteId = (props: Props) => {
                     </Timeline>
                 </>
                 :
-                <p className="text-center">アイテムはありません</p>
+                <p className="text-center">投稿はありません</p>
             }
             {/* 読み込み中の表示 */}
             {processing && (
