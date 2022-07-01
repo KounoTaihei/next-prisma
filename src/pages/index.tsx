@@ -32,10 +32,12 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <div className="text-center py-8">
-        <Loader />
-        <Typography className={classes.typography}>ログイン情報を確認中...</Typography>
-      </div>
+      {loading ? (
+        <div className="text-center py-8">
+          <Loader />
+          <Typography className={classes.typography}>ログイン情報を確認中...</Typography>
+        </div>
+      ): <div className='text-center py-8'>ページ遷移します...</div>}
     </>
   )
 }
