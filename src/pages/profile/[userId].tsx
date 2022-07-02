@@ -56,17 +56,16 @@ const Profile = (props: Props) => {
                             <>
                                 <table>
                                     <tbody>
-                                        <tr><th className="px-2">登録日</th><td className="px-2">{getFormattedDate(user.createdAt)}</td></tr>
-                                        <tr><th className="px-2">ノート数</th><td className="px-2">{notes.length}</td></tr>
                                         <tr><th className="px-2">最新の投稿</th>
                                             <td className="px-2">
                                                 {notes.length ? (
                                                     getFormattedDate(getLatestDate(
                                                         notes.map(note => note.createdAt)
-                                                    ))
-                                                ) : "ノート無し"}
+                                                        ))
+                                                        ) : "ノート無し"}
                                             </td>
                                         </tr>
+                                        <tr><th className="px-2">ノート数</th><td className="px-2">{notes.length}</td></tr>
                                     </tbody>
                                 </table>
                             </>

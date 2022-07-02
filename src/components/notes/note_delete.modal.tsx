@@ -97,7 +97,7 @@ export const NoteDeleteModal = ({
                     {itemsLength > 0 && (
                         <DialogContentText className={classes.alertMessage}>
                             <FontAwesomeIcon icon={faExclamationCircle} className={classes.icon} />
-                            アイテムが追加されている為削除できません。
+                            投稿が追加されている為削除できません。
                         </DialogContentText>
                     )}
                     <DialogActions className={classes.actions}>
