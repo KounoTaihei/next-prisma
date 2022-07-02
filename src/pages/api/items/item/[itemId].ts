@@ -5,6 +5,11 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     switch(method) {
         case 'DELETE': {
             const itemId = req.query.itemId.toString();
+            const hearts = await prisma.heart.deleteMany({
+                where: {
+                    itemId: itemId
+                }
+            });
             const item = await prisma.item.delete({
                 where: { id: itemId }
             });

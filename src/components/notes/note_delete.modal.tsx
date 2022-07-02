@@ -104,11 +104,16 @@ export const NoteDeleteModal = ({
                         <Button variant="outlined" onClick={() => setModalOpen(false)}>
                             戻る
                         </Button>
-                        {itemsLength > 0 ? (
+                        {/* {itemsLength > 0 ? (
                             <Button variant="outlined" color="secondary" type="submit" disabled={submitting} onClick={deleteAllItems}>
                                 アイテムを全て削除
                             </Button>
                         ) : (
+                            <Button variant="outlined" color="secondary" type="submit" disabled={submitting} onClick={deleteNote}>
+                                削除
+                            </Button>
+                        )} */}
+                        {itemsLength === 0 && (
                             <Button variant="outlined" color="secondary" type="submit" disabled={submitting} onClick={deleteNote}>
                                 削除
                             </Button>
