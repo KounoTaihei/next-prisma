@@ -9,7 +9,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import * as Yup from 'yup';
 import { getFormattedDate } from "../../../functions/get_formatted_date";
 import { Loader } from "../loader";
-import { postImage } from "../../pages/api/upload";
+import { postImage } from "../../pages/api/image/upload";
 
 const apiUrl = '/api/items';
 

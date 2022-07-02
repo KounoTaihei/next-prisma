@@ -1,4 +1,4 @@
-import { storage } from '../../../helpers/firebase';
+import { storage } from '../../../../helpers/firebase';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const postImage = async(image:any=null) => {

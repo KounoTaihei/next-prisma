@@ -19,7 +19,6 @@ import { NoteWithUser } from "../../../types/note";
 import { revalidateTime } from "../../../lib/revalidate_time";
 import { getHearted } from "../../../functions/get_hearted";
 import { Loader } from "../../components/loader";
-import { getDownloadURL } from "firebase/storage";
 import { ItemDeleteModal } from "../../components/items/item_delete.modal";
 
 const FindItemsByNoteId = (props: Props) => {
@@ -32,7 +31,9 @@ const FindItemsByNoteId = (props: Props) => {
     const [ itemCreateModalOpen, setItemCreateModalOpen ] = useState<boolean>(false);
     const [ noteUpdateModalOpen, setNoteUpdateModalOpen ] = useState<boolean>(false);
     const [ noteDeleteModalOpen, setNoteDeleteModalOpen ] = useState<boolean>(false);
-    const [ itemDeleteModalOpen, setItemDeleteModalOpen ] = useState<boolean>(false);
+
+    /** 投稿削除モーダル → 全部閉じてる状態が0 */
+    const [ itemDeleteModalOpen, setItemDeleteModalOpen ] = useState<number>(0);
 
     /** ノートを再取得 */
     const getNote = async () => {
@@ -195,7 +196,7 @@ const FindItemsByNoteId = (props: Props) => {
     /** --- */
 
     /** タイムライン */
-    const timelineContent = ( item: ItemWithHearts ) => {
+    const timelineContent = ( item: ItemWithHearts, modalNumber: number ) => {
         return (
             <>
                 <CardHeader
@@ -240,12 +241,12 @@ const FindItemsByNoteId = (props: Props) => {
                                 {/* <IconButton className={classes.icon}>
                                     <FontAwesomeIcon icon={faPen} />
                                 </IconButton> */}
-                                <IconButton className={classes.icon} onClick={() => setItemDeleteModalOpen(true)}>
+                                <IconButton className={classes.icon} onClick={() => setItemDeleteModalOpen(modalNumber)}>
                                     <FontAwesomeIcon icon={faTrash} />
                                 </IconButton>
                                 <ItemDeleteModal
                                     item={item}
-                                    modalOpen={itemDeleteModalOpen}
+                                    modalOpen={itemDeleteModalOpen === modalNumber ? true : false}
                                     setModalOpen={setItemDeleteModalOpen}
                                 />
                             </>
@@ -353,7 +354,7 @@ const FindItemsByNoteId = (props: Props) => {
                                 <TimelineItem
                                     className={classes.timeline}
                                 >
-                                    <TimelineContent>{timelineContent(item)}</TimelineContent>
+                                    <TimelineContent>{timelineContent(item, i + 1)}</TimelineContent>
                                 </TimelineItem>
                             </div>
                         )}

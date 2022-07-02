@@ -5,12 +5,13 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, IconBu
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useRouter } from "next/dist/client/router";
 import { Dispatch, SetStateAction, useState } from "react";
+import { deleteImage } from "../../pages/api/image/delete";
 import { Loader } from "../loader";
 
 export const ItemDeleteModal = ({
     item,
     modalOpen,
-    setModalOpen,
+    setModalOpen
 }: Props ) => {
     const router = useRouter();
     const [ submitting, setSubmitting ] = useState<boolean>(false);
@@ -41,15 +42,16 @@ export const ItemDeleteModal = ({
     const classes = useStyles();
 
     const handleClose = () => {
-        setModalOpen(false);
+        setModalOpen(0);
     }
 
     const deleteItem = async () => {
         setSubmitting(true);
+        await deleteImage(item.image);
         await fetch(`/api/items/item/${item.id}`, {
             method: 'DELETE'
         }).then(() => {
-            setModalOpen(false);
+            setModalOpen(0);
             setSubmitting(false);
         })
         .catch(err => {
@@ -78,7 +80,7 @@ export const ItemDeleteModal = ({
                         </IconButton>
                     </DialogContentText>
                     <DialogActions className={classes.actions}>
-                        <Button variant="outlined" onClick={() => setModalOpen(false)}>
+                        <Button variant="outlined" onClick={() => setModalOpen(0)}>
                             戻る
                         </Button>
                         <Button variant="outlined" color="secondary" type="submit" disabled={submitting} onClick={deleteItem}>
@@ -94,5 +96,5 @@ export const ItemDeleteModal = ({
 interface Props {
     item: Item
     modalOpen: boolean
-    setModalOpen: Dispatch<SetStateAction<boolean>>
+    setModalOpen: Dispatch<SetStateAction<number>>
 }
