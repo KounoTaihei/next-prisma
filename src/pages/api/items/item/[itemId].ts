@@ -13,7 +13,7 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
             const item = await prisma.item.delete({
                 where: { id: itemId }
             });
-            res.status(200).json(item, hearts);
+            res.status(200).json(item);
             break;
         }
         default: {
