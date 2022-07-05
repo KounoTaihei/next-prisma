@@ -49,8 +49,9 @@ export const ItemDeleteModal = ({
         setSubmitting(true);
         await fetch(`/api/items/item/${item.id}`, {
             method: 'DELETE'
+        }).then(() => {
+            deleteImage(item.image);
         })
-        await deleteImage(item.image)
         .then(() => {
             setModalOpen(0);
             setSubmitting(false);
