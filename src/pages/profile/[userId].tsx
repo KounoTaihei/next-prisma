@@ -107,7 +107,7 @@ const Profile = (props: Props) => {
                                                         <th className="px-2">最新の投稿</th>
                                                         <td className="px-2">{note.items.length ? getFormattedDate(
                                                                 getLatestDate(note.items.map(item => item.createdAt))
-                                                            ) : "アイテムなし"}
+                                                            ) : "投稿なし"}
                                                         </td>
                                                     </tr>
                                                     <tr><th className="px-2">作成日</th><td className="px-2">{getFormattedDate(note.createdAt)}</td></tr>
