@@ -3,7 +3,8 @@
 ## テストアカウント
 
 メール: testaka13579@gmail.com
-パスワード
+
+パスワード: test@1234
 
 ### 使用言語: nextjs(reactjs),typescript
 
