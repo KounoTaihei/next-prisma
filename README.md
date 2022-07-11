@@ -1,5 +1,10 @@
 ## URL: https://next-prisma-lake.vercel.app/
 
+## テストアカウント
+
+メール: testaka13579@gmail.com
+パスワード
+
 ### 使用言語: nextjs(reactjs),typescript
 
 ### データベース: postgresql
